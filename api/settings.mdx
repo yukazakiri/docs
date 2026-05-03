@@ -1,0 +1,129 @@
+---
+title: "REST API endpoints for settings"
+description: "Read public branding settings without a token, or use authenticated endpoints to list, query, and update general settings and per-user preferences via the API."
+---
+
+The settings API is split into two groups. The public settings endpoint exposes branding and website configuration without requiring authentication — useful for rendering a login page or public portal. All other settings endpoints require a Bearer token and allow you to read or update general configuration and per-user preferences. See [authentication](/api/authentication) to set up your token.
+
+## Public endpoint
+
+The following endpoint is open and requires no token:
+
+| Method | Path | Auth | Description |
+| --- | --- | --- | --- |
+| `GET` | `/api/v1/public/settings` | None | Public website and branding settings |
+
+### Example response — GET /api/v1/public/settings
+
+```json
+{
+  "data": {
+    "school_name": "KoAkademy",
+    "tagline": "Excellence in Education",
+    "logo_url": "https://<your-domain>/storage/logo.png",
+    "favicon_url": "https://<your-domain>/storage/favicon.ico",
+    "primary_color": "#1E40AF",
+    "contact_email": "info@koakademy.edu",
+    "address": "123 Learning Ave, Manila, Philippines",
+    "website": "https://koakademy.edu"
+  }
+}
+```
+
+## Authenticated settings endpoints
+
+All endpoints below require a Bearer token.
+
+| Method | Path | Description |
+| --- | --- | --- |
+| `GET` | `/api/settings` | List all settings |
+| `GET` | `/api/settings/current` | Get current active settings |
+| `GET` | `/api/settings/service` | Get service-level settings |
+| `GET` | `/api/settings/key/{key}` | Get a specific setting by key |
+| `GET` | `/api/settings/user/preferences` | Get the current user's preferences |
+| `PATCH` | `/api/settings/user/preferences` | Update the current user's preferences |
+| `POST` | `/api/settings/user/semester` | Set the active semester for the current user |
+| `POST` | `/api/settings/user/school-year` | Set the active school year for the current user |
+| `GET` | `/api/settings/global` | Get global system settings |
+
+### GET /api/settings/key/{key}
+
+Pass the setting key as a path segment to retrieve a single setting value.
+
+**Request**
+
+```http
+GET /api/settings/key/max_units_per_semester
+Authorization: Bearer <your_token>
+Accept: application/json
+```
+
+**Response**
+
+```json
+{
+  "data": {
+    "key": "max_units_per_semester",
+    "value": "24",
+    "type": "integer",
+    "description": "Maximum number of units a student can enroll in per semester."
+  }
+}
+```
+
+### PATCH /api/settings/user/preferences
+
+Updates preferences for the currently authenticated user. Send only the fields you want to change.
+
+**Request body**
+
+```json
+{
+  "theme": "dark",
+  "language": "en",
+  "notifications_enabled": true,
+  "default_view": "list"
+}
+```
+
+**Response** — `200 OK`
+
+```json
+{
+  "data": {
+    "theme": "dark",
+    "language": "en",
+    "notifications_enabled": true,
+    "default_view": "list",
+    "updated_at": "2025-01-20T10:00:00Z"
+  }
+}
+```
+
+### POST /api/settings/user/semester
+
+Sets the active semester context for the current user's session. This affects how data is filtered across the portal.
+
+**Request body**
+
+```json
+{
+  "semester_id": 3
+}
+```
+
+### POST /api/settings/user/school-year
+
+Sets the active school year for the current user's session.
+
+**Request body**
+
+```json
+{
+  "school_year_id": 7
+}
+```
+
+<Tip>
+  Use `GET /api/settings/current` to confirm which semester and school year are currently active for your token's user context before making filtered requests to other endpoints.
+</Tip>

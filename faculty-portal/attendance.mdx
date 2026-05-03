@@ -1,0 +1,105 @@
+---
+title: 'Taking attendance in KoAkademy'
+description: 'Create attendance sessions for each class meeting, mark individual student records as present, absent, late, or excused, and export attendance reports.'
+---
+
+Attendance in KoAkademy is tracked session by session. For each class meeting, you create a session and then record a status for every enrolled student. Sessions are tied to a specific class, so you manage attendance from the class detail page. You can also export a full attendance report for any class at any time.
+
+## Creating an attendance session
+
+<Steps>
+  <Step title="Open the Attendance tab">
+    Navigate to `/faculty/classes` and select your class. On the class detail page, open the **Attendance** tab.
+  </Step>
+  <Step title="Create a new session">
+    Select **New session**. Enter the date, time, and any notes relevant to the meeting (for example, a topic covered or a reason for a short session).
+  </Step>
+  <Step title="Save the session">
+    Submit the form. The session appears in the list and is ready for you to record individual student statuses.
+  </Step>
+</Steps>
+
+<Tip>
+  Create the attendance session at the start of each class meeting so your records stay current. Recording attendance later from memory increases the chance of errors.
+</Tip>
+
+## Updating session details
+
+If you need to correct the date, time, or notes for a session after saving it, open the session from the **Attendance** tab and select **Edit session**. Make your changes and save. Edits do not affect attendance statuses already recorded for that session.
+
+## Recording student attendance
+
+After creating a session, record a status for each student.
+
+<Steps>
+  <Step title="Open the session">
+    On the **Attendance** tab, select the session you want to fill in.
+  </Step>
+  <Step title="Mark each student">
+    For every student in the list, choose one of the four statuses:
+
+    | Status | When to use |
+    |---|---|
+    | Present | Student attended the full class meeting |
+    | Absent | Student did not attend with no approved reason |
+    | Late | Student arrived after the session started |
+    | Excused | Student was absent with an approved reason |
+  </Step>
+  <Step title="Save the records">
+    Save when you have marked all students. You can return and edit any record until the session is finalized.
+  </Step>
+</Steps>
+
+## Editing an existing session
+
+You can edit both session details and individual attendance records after the fact.
+
+- To update the session date, time, or notes: open the session and select **Edit session**.
+- To change a student's attendance status: open the session, find the student, and update their status. Save to apply the change.
+
+<Note>
+  If your institution locks attendance records after a set number of days, you may not be able to edit older sessions. Contact your administrator if you need to correct a locked record.
+</Note>
+
+## Deleting a session
+
+If you created a session in error — for example, a duplicate or a session for the wrong class — you can delete it from the session's action menu. Select **Delete session** and confirm. Deleting a session also removes all attendance records associated with it.
+
+<Warning>
+  Deleting a session permanently removes all student attendance records for that meeting. This action cannot be undone. Only delete sessions that were created by mistake.
+</Warning>
+
+## Exporting attendance records
+
+You can download a complete attendance report for any class as a spreadsheet.
+
+<Steps>
+  <Step title="Open the Attendance tab">
+    Navigate to the class and open the **Attendance** tab.
+  </Step>
+  <Step title="Select Export">
+    Select **Export attendance**. The system compiles all sessions and student records for the class.
+  </Step>
+  <Step title="Download the file">
+    A spreadsheet downloads to your device. The file includes all sessions, dates, and each student's status for every meeting.
+  </Step>
+</Steps>
+
+The exported file is useful for submitting attendance summaries to your department, reviewing patterns in student participation, or keeping an offline backup of your records.
+
+## Related pages
+
+<CardGroup cols={2}>
+  <Card title="Managing classes" icon="chalkboard-user" href="/faculty-portal/classes">
+    Create classes and manage enrolled students.
+  </Card>
+  <Card title="Recording grades" icon="pen-to-square" href="/faculty-portal/grades">
+    Enter and submit student grades by grading period.
+  </Card>
+  <Card title="Faculty portal overview" icon="house" href="/faculty-portal/overview">
+    Overview of all faculty portal features and navigation.
+  </Card>
+  <Card title="API overview" icon="code" href="/api/overview">
+    Reference for the KoAkademy API.
+  </Card>
+</CardGroup>

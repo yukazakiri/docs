@@ -1,0 +1,63 @@
+---
+title: "KoAkademy REST API overview"
+description: "Explore KoAkademy's REST API — base URL, versioning, JSON responses, Bearer token auth, and resource groups for students, enrollments, settings, and more."
+---
+
+The KoAkademy REST API gives you programmatic access to students, enrollments, class records, settings, organizations, and jobs. All responses are JSON, and the API follows standard HTTP status code conventions. You authenticate using a Bearer token issued by Laravel Sanctum — see the [authentication guide](/api/authentication) for details on obtaining and using tokens.
+
+## Base URL
+
+```
+https://<your-domain>/api
+```
+
+Versioned public endpoints use the `/api/v1/` prefix. Most authenticated endpoints use `/api/` directly.
+
+## API version
+
+The current API version is **v1**. Public endpoints are served at `/api/v1/public/`. Authenticated resource endpoints (students, enrollments, settings, etc.) are served directly under `/api/`.
+
+## Response format
+
+Every response body is JSON. The `Content-Type` header is always `application/json`. Successful requests return `2xx` status codes; errors return `4xx` or `5xx` with a JSON body describing the problem.
+
+## Authentication
+
+All authenticated endpoints require a `Bearer` token in the `Authorization` header. The public settings endpoint (`GET /api/v1/public/settings`) is the only endpoint that does not require a token. See [Authenticate with the KoAkademy API](/api/authentication) for setup instructions.
+
+## Available resource groups
+
+| Resource | Endpoints |
+| --- | --- |
+| Public Settings | `GET /api/v1/public/settings` |
+| Students | `/api/students` (CRUD + verify) |
+| Enrollments | `/api/enrollments` |
+| Class Enrollments | `/api/class-enrollments` |
+| Settings | `/api/settings` |
+| Organizations | `/api/organizations` |
+| Jobs | `/api/jobs` |
+
+## Rate limiting
+
+KoAkademy does not publish a hard rate limit, but you should be respectful with request frequency. Avoid tight polling loops; use webhooks or server-sent events where available. Aggressive request patterns may result in temporary blocks.
+
+<CardGroup cols={2}>
+  <Card title="Authentication" icon="key" href="/api/authentication">
+    Obtain a Bearer token and pass it in your requests.
+  </Card>
+  <Card title="Students" icon="user" href="/api/students">
+    CRUD endpoints for student records plus soft-delete and restore.
+  </Card>
+  <Card title="Enrollments" icon="graduation-cap" href="/api/enrollments">
+    Manage enrollment records, schedules, and tuition assessments.
+  </Card>
+  <Card title="Class enrollments" icon="book-open" href="/api/class-enrollments">
+    Class enrollment records, grades, and bulk grade operations.
+  </Card>
+  <Card title="Settings" icon="sliders" href="/api/settings">
+    Read and update general and user preference settings.
+  </Card>
+  <Card title="Student verification" icon="circle-check" href="/api/student-verification">
+    Verify a student exists by ID and email in a single call.
+  </Card>
+</CardGroup>

@@ -1,0 +1,139 @@
+---
+title: 'Managing classes in the faculty portal'
+description: 'Create and configure classes, manage enrolled students, post assignments, and review student submissions from the KoAkademy faculty portal.'
+---
+
+The classes section of the faculty portal is where you spend most of your time. You can create new classes for the current term, configure their schedules and settings, manage which students are enrolled, post announcements and assignments, and review what students have submitted. Everything related to a specific class lives under that class's detail page.
+
+## Viewing your classes
+
+Go to `/faculty/classes` to see all classes assigned to you for the active term. Each entry shows the subject, section, and schedule. Select a class to open its detail page, where tabs give you access to students, grades, attendance, posts, and settings.
+
+## Creating a new class
+
+<Steps>
+  <Step title="Open the classes list">
+    Navigate to `/faculty/classes` and select **Create class**.
+  </Step>
+  <Step title="Fill in the class details">
+    Enter the subject, section identifier, and schedule (days and times). All three fields are required before you can save.
+  </Step>
+  <Step title="Save the class">
+    Submit the form. The new class appears in your list and is ready for students and posts.
+  </Step>
+</Steps>
+
+## Editing class details and schedules
+
+To update a class after it has been created, open the class detail page and select **Edit**. You can change the subject name, section, and any schedule entries. Schedule updates are saved separately — look for the schedule section within the edit view and save it independently.
+
+<Note>
+  Changing a class schedule does not notify enrolled students automatically. Consider posting an announcement after updating meeting times.
+</Note>
+
+## Managing students
+
+### Adding students
+
+<Steps>
+  <Step title="Open the students tab">
+    On the class detail page, select the **Students** tab.
+  </Step>
+  <Step title="Search for a student">
+    Use the search field to find a student by name or student ID. Results appear as you type.
+  </Step>
+  <Step title="Add the student">
+    Select the student from the results and confirm. They are immediately enrolled in the class.
+  </Step>
+</Steps>
+
+### Removing a student
+
+On the **Students** tab, locate the student you want to remove, open their action menu, and select **Remove from class**. Confirm the action. The student is unenrolled from this section but their records are preserved.
+
+### Moving a student between sections
+
+To move a student to a different section, open their action menu on the **Students** tab and select **Move to section**. Choose the destination class from the list. The move is submitted as a request and may require administrator approval depending on your institution's settings.
+
+### Creating SHS students within a class
+
+If you are managing a Senior High School (SHS) class, you can create new student accounts directly from the class context without going through the main student directory. On the **Students** tab, select **Create SHS student** and fill in the required details. The new student is created and enrolled in one step.
+
+## Class posts: announcements and assignments
+
+Posts let you share information with your class and collect student work. There are two types: announcements (informational) and assignments (require submission).
+
+### Creating a post
+
+<Steps>
+  <Step title="Open the Posts tab">
+    On the class detail page, select the **Posts** tab and then **New post**.
+  </Step>
+  <Step title="Set the post type and content">
+    Choose whether the post is an announcement or an assignment. Add a title, body text, and — for assignments — a due date and any attachments.
+  </Step>
+  <Step title="Set the post status">
+    Choose **Draft** to save without publishing, or **Published** to make it visible to students immediately.
+  </Step>
+  <Step title="Save the post">
+    Submit the form. Published posts appear in students' class feeds right away.
+  </Step>
+</Steps>
+
+### Editing and deleting posts
+
+To edit a post, open it from the **Posts** tab and select **Edit**. Make your changes and save. To delete a post, open the post's action menu and select **Delete**. Deleting a published post removes it from student view immediately.
+
+### Updating post status
+
+You can change a post between **Draft** and **Published** at any time from the post's action menu. Use draft status to prepare content in advance and publish it when you are ready.
+
+## Reviewing and grading submissions
+
+For assignment posts, submitted student work appears under the post's **Submissions** view.
+
+<Steps>
+  <Step title="Open the assignment post">
+    On the **Posts** tab, select the assignment you want to review.
+  </Step>
+  <Step title="View submissions">
+    Select **View submissions** to see the list of students who have submitted, along with submission dates and file attachments.
+  </Step>
+  <Step title="Grade a submission">
+    Open a submission and enter a score and any feedback. Save to record the grade for that student.
+  </Step>
+</Steps>
+
+## Exporting the student list
+
+You can download the full student roster for a class in two formats:
+
+<Tabs>
+  <Tab title="PDF">
+    On the **Students** tab, select **Export** and choose **PDF**. A formatted roster downloads to your device, suitable for printing or filing.
+  </Tab>
+  <Tab title="Spreadsheet">
+    On the **Students** tab, select **Export** and choose **Spreadsheet**. A CSV or Excel file downloads with student names, IDs, and enrollment details.
+  </Tab>
+</Tabs>
+
+## Class settings
+
+Each class has its own settings page accessible from the **Settings** tab on the class detail view. Here you can configure class-specific options such as grading preferences and visibility controls. Changes take effect immediately after saving.
+
+## Related pages
+
+<CardGroup cols={2}>
+  <Card title="Recording grades" icon="pen-to-square" href="/faculty-portal/grades">
+    Enter prelim, midterm, and final grades and submit them for review.
+  </Card>
+  <Card title="Taking attendance" icon="clipboard-check" href="/faculty-portal/attendance">
+    Create attendance sessions and mark student records.
+  </Card>
+  <Card title="Faculty portal overview" icon="house" href="/faculty-portal/overview">
+    Overview of all faculty portal features and navigation.
+  </Card>
+  <Card title="Class enrollments API" icon="code" href="/api/class-enrollments">
+    API reference for class enrollment data.
+  </Card>
+</CardGroup>

@@ -1,0 +1,84 @@
+---
+title: 'Recording and submitting student grades'
+description: 'Enter prelim, midterm, and final grades for each student in your classes, then submit them for administrator review and finalization.'
+---
+
+Grades in KoAkademy are organized by grading period — prelim, midterm, and finals — and are entered directly from the class detail page. Once you have recorded scores for a period, you submit them to trigger the review workflow. Submitted grades go to your administrator for verification before they become official and visible to students.
+
+## Opening the grades tab
+
+Navigate to `/faculty/classes` and select the class you want to grade. On the class detail page, open the **Grades** tab. You will see a list of enrolled students with columns for each grading period.
+
+## Entering grades
+
+Grades are entered as numeric values. Click the cell for a student and period, type the score, and move to the next cell. You can tab through cells to enter grades quickly across the roster.
+
+<Tip>
+  Save your work frequently as you go. Unsaved changes are lost if you navigate away from the page.
+</Tip>
+
+### Grading periods
+
+| Period | When to use |
+|---|---|
+| Prelim | First grading period of the term |
+| Midterm | Mid-term examination or performance grades |
+| Finals | End-of-term grades |
+
+Each period is independent. You can enter and submit them at different times as the term progresses.
+
+## Updating grades
+
+You can edit any grade that has not yet been submitted for finalization. Open the **Grades** tab, click the cell you want to change, enter the new value, and save. Once a period has been submitted, contact your administrator to request a correction.
+
+## Submitting grades for finalization
+
+When you are satisfied with the grades for a period, submit them to begin the review process.
+
+<Steps>
+  <Step title="Review your entries">
+    Scan the grades tab to confirm all students have scores entered for the period you are submitting. Empty cells will not be included in the submission.
+  </Step>
+  <Step title="Select the period to submit">
+    On the **Grades** tab, choose the grading period (prelim, midterm, or finals) you want to finalize.
+  </Step>
+  <Step title="Submit grades">
+    Select **Submit grades** for that period. A confirmation prompt appears — confirm to proceed.
+  </Step>
+  <Step title="Wait for administrator review">
+    Your submission enters the review queue. You will be notified when the administrator has verified and posted the grades.
+  </Step>
+</Steps>
+
+<Warning>
+  Submitted grades may not be edited until administrator verification is complete. Double-check all entries before submitting. If you need to correct a submitted grade, contact your administrator directly.
+</Warning>
+
+## Grade statistics
+
+The portal displays summary statistics for each class once enough grades have been entered. You can view the class average, highest score, lowest score, and grade distribution from the **Grades** tab. These statistics update automatically as you enter or modify scores.
+
+## When do students see their grades?
+
+Grades become visible to students only after an administrator posts them. Even if you have submitted a grading period, students will not see scores until the posting step is complete.
+
+<Note>
+  Check with your administrator or registrar for the posting schedule at your institution. Posting timelines may vary by term or grading period.
+</Note>
+
+## Related pages
+
+<CardGroup cols={2}>
+  <Card title="Managing classes" icon="chalkboard-user" href="/faculty-portal/classes">
+    Set up classes and manage enrolled students.
+  </Card>
+  <Card title="Taking attendance" icon="clipboard-check" href="/faculty-portal/attendance">
+    Record student attendance for each class meeting.
+  </Card>
+  <Card title="Class enrollments API" icon="code" href="/api/class-enrollments">
+    API reference for grade submission and statistics endpoints.
+  </Card>
+  <Card title="Faculty portal overview" icon="house" href="/faculty-portal/overview">
+    Overview of all faculty portal features.
+  </Card>
+</CardGroup>

@@ -1,0 +1,177 @@
+---
+title: "REST API endpoints for students"
+description: "Reference for student CRUD endpoints — list, create, update, soft-delete, and restore — with query parameters, filter options, and example JSON responses."
+---
+
+The students API lets you create, read, update, and delete student records in KoAkademy. Soft-deletes are reversible; use the force-delete endpoint when you need to permanently remove a record. All endpoints under `/api/students` require a valid Bearer token — see [authentication](/api/authentication) if you have not set one up yet.
+
+## Base path
+
+```
+/api/students
+```
+
+## Endpoints
+
+| Method | Path | Description |
+| --- | --- | --- |
+| `GET` | `/api/students` | List all students (paginated) |
+| `GET` | `/api/students/{id}` | Get student details |
+| `POST` | `/api/students` | Create a student |
+| `PUT` | `/api/students/{id}` | Update a student (full replace) |
+| `PATCH` | `/api/students/{id}` | Partial update |
+| `DELETE` | `/api/students/{id}` | Soft-delete a student |
+| `POST` | `/api/students/{id}/restore` | Restore a soft-deleted student |
+| `DELETE` | `/api/students/{id}/force` | Permanently delete a student |
+| `POST` | `/api/students/verify` | Verify a student by ID and email |
+
+<Note>
+  The `/api/students/verify` endpoint is documented separately. See [POST /api/students/verify](/api/student-verification).
+</Note>
+
+## Query parameters — GET /api/students
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| `page` | integer | Page number for pagination (default: 1) |
+| `per_page` | integer | Results per page |
+| `filter[status]` | string | Filter by enrollment status (see below) |
+| `filter[course_id]` | integer | Filter by course |
+| `filter[academic_year]` | string | Filter by academic year (e.g. `2024-2025`) |
+| `sort` | string | Field to sort by; prefix with `-` for descending (e.g. `-created_at`) |
+| `fields` | string | Comma-separated list of fields to include in the response |
+
+### Student statuses
+
+| Value | Description |
+| --- | --- |
+| `enrolled` | Currently enrolled |
+| `applicant` | Applied but not yet enrolled |
+| `withdrawn` | Withdrawn from the program |
+| `dropped` | Dropped out |
+| `graduate` | Completed the program |
+
+## Example: list students
+
+**Request**
+
+```http
+GET /api/students?page=1&per_page=2&filter[status]=enrolled
+Authorization: Bearer <your_token>
+Accept: application/json
+```
+
+**Response**
+
+```json
+{
+  "data": [
+    {
+      "id": 1,
+      "student_id": "STU-2024-001",
+      "first_name": "Maria",
+      "last_name": "Santos",
+      "email": "maria.santos@example.com",
+      "status": "enrolled",
+      "course_id": 3,
+      "academic_year": "2024-2025",
+      "student_type": "college",
+      "created_at": "2024-08-01T08:00:00Z"
+    },
+    {
+      "id": 2,
+      "student_id": "STU-2024-002",
+      "first_name": "Juan",
+      "last_name": "dela Cruz",
+      "email": "juan.delacruz@example.com",
+      "status": "enrolled",
+      "course_id": 3,
+      "academic_year": "2024-2025",
+      "student_type": "college",
+      "created_at": "2024-08-02T09:15:00Z"
+    }
+  ],
+  "meta": {
+    "current_page": 1,
+    "per_page": 2,
+    "total": 148,
+    "last_page": 74
+  }
+}
+```
+
+## Example: get a single student
+
+**Request**
+
+```http
+GET /api/students/1
+Authorization: Bearer <your_token>
+Accept: application/json
+```
+
+**Response**
+
+```json
+{
+  "data": {
+    "id": 1,
+    "student_id": "STU-2024-001",
+    "first_name": "Maria",
+    "last_name": "Santos",
+    "email": "maria.santos@example.com",
+    "status": "enrolled",
+    "course_id": 3,
+    "academic_year": "2024-2025",
+    "student_type": "college",
+    "created_at": "2024-08-01T08:00:00Z",
+    "updated_at": "2024-09-10T14:30:00Z"
+  }
+}
+```
+
+## Example: create a student
+
+**Request body**
+
+```json
+{
+  "student_id": "STU-2025-010",
+  "first_name": "Ana",
+  "last_name": "Reyes",
+  "email": "ana.reyes@example.com",
+  "status": "applicant",
+  "course_id": 5,
+  "academic_year": "2025-2026",
+  "student_type": "college"
+}
+```
+
+**Response** — `201 Created`
+
+```json
+{
+  "data": {
+    "id": 149,
+    "student_id": "STU-2025-010",
+    "first_name": "Ana",
+    "last_name": "Reyes",
+    "email": "ana.reyes@example.com",
+    "status": "applicant",
+    "course_id": 5,
+    "academic_year": "2025-2026",
+    "student_type": "college",
+    "created_at": "2025-01-15T10:00:00Z",
+    "updated_at": "2025-01-15T10:00:00Z"
+  }
+}
+```
+
+## Error codes
+
+| Status | Description |
+| --- | --- |
+| `401 Unauthorized` | Token is missing or expired |
+| `403 Forbidden` | Token lacks permission for this operation |
+| `404 Not Found` | No student found with the given `{id}` |
+| `422 Unprocessable Entity` | Request body failed validation; check the `errors` field |

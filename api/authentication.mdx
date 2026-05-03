@@ -1,0 +1,109 @@
+---
+title: "Authenticate with the KoAkademy API"
+description: "Learn how to obtain a KoAkademy API Bearer token, attach it to every request, and handle 401 Unauthorized and 403 Forbidden error responses."
+---
+
+KoAkademy uses Bearer token authentication. Every authenticated request must include your API token in the `Authorization` header. The only exception is `GET /api/v1/public/settings`, which is publicly accessible without a token.
+
+## Obtain an API token
+
+<Steps>
+  <Step title="Log into the portal">
+    Sign in to the student or faculty portal with your account credentials.
+  </Step>
+  <Step title="Enable developer mode">
+    Developer mode must be active on your account before the API Keys section appears. Contact your administrator if you do not see this option.
+  </Step>
+  <Step title="Open Profile → API Keys">
+    Navigate to your profile settings and select **API Keys** from the sidebar.
+  </Step>
+  <Step title="Create a new API key">
+    Click **Create new API key**, enter a descriptive name for the key (for example, `my-integration`), and confirm.
+  </Step>
+  <Step title="Copy the token">
+    Copy the token immediately. It will not be displayed again. Store it somewhere safe before closing the dialog.
+  </Step>
+</Steps>
+
+<Warning>
+  Treat API tokens like passwords. If a token is compromised, delete it from the API Keys page and create a replacement immediately.
+</Warning>
+
+## Pass the token in requests
+
+Include the token in every authenticated request using the `Authorization` and `Accept` headers:
+
+```http
+Authorization: Bearer <your_token>
+Accept: application/json
+```
+
+<Tip>
+  Store your token in an environment variable (for example, `KOAKADEMY_API_TOKEN`) and read it at runtime. Never hard-code tokens in source code or commit them to version control.
+</Tip>
+
+## Code examples
+
+<CodeGroup>
+
+```javascript javascript
+const response = await fetch('https://<your-domain>/api/students', {
+  method: 'GET',
+  headers: {
+    'Authorization': `Bearer ${process.env.KOAKADEMY_API_TOKEN}`,
+    'Accept': 'application/json',
+  },
+});
+
+const data = await response.json();
+console.log(data);
+```
+
+```python python
+import os
+import requests
+
+headers = {
+    'Authorization': f'Bearer {os.environ["KOAKADEMY_API_TOKEN"]}',
+    'Accept': 'application/json',
+}
+
+response = requests.get('https://<your-domain>/api/students', headers=headers)
+data = response.json()
+print(data)
+```
+
+```php php
+$token = getenv('KOAKADEMY_API_TOKEN');
+
+$ch = curl_init('https://<your-domain>/api/students');
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer ' . $token,
+    'Accept: application/json',
+]);
+
+$body = curl_exec($ch);
+curl_close($ch);
+
+$data = json_decode($body, true);
+```
+
+</CodeGroup>
+
+## Public endpoints
+
+The following endpoint does **not** require authentication and can be called without a token:
+
+| Method | Path | Description |
+| --- | --- | --- |
+| GET | `/api/v1/public/settings` | Public website and branding settings |
+
+## Error responses
+
+| Status | Meaning | Common cause |
+| --- | --- | --- |
+| `401 Unauthorized` | Token is missing or has expired | No `Authorization` header, or the token was deleted |
+| `403 Forbidden` | Token is valid but lacks permission | Your account does not have access to the requested resource |
+
+When you receive a `401`, generate a new token following the steps above. When you receive a `403`, check with your administrator whether your account has the required role or permission for the endpoint.

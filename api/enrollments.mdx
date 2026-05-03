@@ -1,0 +1,128 @@
+---
+title: "REST API endpoints for enrollments"
+description: "Reference for enrollment CRUD endpoints plus schedule, tuition assessment, and statistics sub-resources — with example JSON request and response bodies."
+---
+
+The enrollments API lets you manage a student's enrollment record for a given academic period. Beyond basic CRUD, you can fetch the student's class schedule, retrieve a tuition fee assessment, and pull summary statistics across all enrollments. All endpoints require a Bearer token — see [authentication](/api/authentication) to get started.
+
+## Base path
+
+```
+/api/enrollments
+```
+
+## Endpoints
+
+| Method | Path | Description |
+| --- | --- | --- |
+| `GET` | `/api/enrollments` | List enrollments |
+| `GET` | `/api/enrollments/{id}` | Get enrollment details |
+| `POST` | `/api/enrollments` | Create enrollment |
+| `PUT` | `/api/enrollments/{id}` | Update enrollment (full replace) |
+| `PATCH` | `/api/enrollments/{id}` | Partial update |
+| `DELETE` | `/api/enrollments/{id}` | Soft-delete enrollment |
+| `POST` | `/api/enrollments/{id}/restore` | Restore a soft-deleted enrollment |
+| `DELETE` | `/api/enrollments/{id}/force` | Permanently delete enrollment |
+| `GET` | `/api/enrollments/{id}/schedule` | Get the student's class schedule |
+| `GET` | `/api/enrollments/{id}/assessment` | Get the tuition fee assessment |
+| `GET` | `/api/enrollments/statistics/summary` | Enrollment statistics summary |
+
+## GET /api/enrollments/{id}/schedule
+
+Returns the list of classes the enrolled student is scheduled for in the current term.
+
+**Request**
+
+```http
+GET /api/enrollments/42/schedule
+Authorization: Bearer <your_token>
+Accept: application/json
+```
+
+**Response**
+
+```json
+{
+  "data": {
+    "enrollment_id": 42,
+    "student_id": "STU-2024-001",
+    "academic_year": "2024-2025",
+    "semester": "1st",
+    "schedule": [
+      {
+        "class_id": 101,
+        "subject_code": "CS101",
+        "subject_name": "Introduction to Computing",
+        "units": 3,
+        "instructor": "Prof. Reyes",
+        "days": ["Monday", "Wednesday"],
+        "time_start": "08:00",
+        "time_end": "09:30",
+        "room": "Lab 2"
+      },
+      {
+        "class_id": 108,
+        "subject_code": "MATH201",
+        "subject_name": "Calculus I",
+        "units": 3,
+        "instructor": "Prof. Lim",
+        "days": ["Tuesday", "Thursday"],
+        "time_start": "10:00",
+        "time_end": "11:30",
+        "room": "Room 305"
+      }
+    ]
+  }
+}
+```
+
+## GET /api/enrollments/{id}/assessment
+
+Returns the tuition fee breakdown for the enrollment.
+
+**Request**
+
+```http
+GET /api/enrollments/42/assessment
+Authorization: Bearer <your_token>
+Accept: application/json
+```
+
+**Response**
+
+```json
+{
+  "data": {
+    "enrollment_id": 42,
+    "student_id": "STU-2024-001",
+    "academic_year": "2024-2025",
+    "semester": "1st",
+    "fees": {
+      "tuition": 18000.00,
+      "miscellaneous": 2500.00,
+      "laboratory": 1200.00,
+      "registration": 500.00,
+      "total": 22200.00
+    },
+    "payment_status": "partial",
+    "balance": 11100.00,
+    "currency": "PHP"
+  }
+}
+```
+
+## GET /api/enrollments/statistics/summary
+
+Returns aggregated enrollment counts across statuses and academic periods.
+
+<Note>
+  Call this endpoint without an `{id}`. It aggregates data across all enrollment records your token has access to.
+</Note>
+
+## Error codes
+
+| Status | Description |
+| --- | --- |
+| `401 Unauthorized` | Token is missing or expired |
+| `404 Not Found` | No enrollment found with the given `{id}` |
+| `422 Unprocessable Entity` | Request body failed validation; check the `errors` field |

@@ -1,0 +1,118 @@
+{
+  "projectType": "saas",
+  "projectName": "KoAkademy",
+  "projectDescription": "KoAkademy is an open-source academic management platform that handles student enrollment, billing, scheduling, grading, and administrative workflows for schools and universities.",
+  "theme": "almond",
+  "primaryColor": "#0f172a",
+  "lightColor": "#e2e8f0",
+  "darkColor": "#0f172a",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction",
+              "quickstart"
+            ]
+          },
+          {
+            "group": "Student Portal",
+            "pages": [
+              "student-portal/dashboard",
+              "student-portal/enrollment",
+              "student-portal/academics",
+              "student-portal/finances",
+              "student-portal/digital-id"
+            ]
+          },
+          {
+            "group": "Faculty Portal",
+            "pages": [
+              "faculty-portal/overview",
+              "faculty-portal/classes",
+              "faculty-portal/grades",
+              "faculty-portal/attendance"
+            ]
+          },
+          {
+            "group": "Configuration",
+            "pages": [
+              "configuration/branding",
+              "configuration/academic-settings",
+              "configuration/modules"
+            ]
+          },
+          {
+            "group": "Help & Support",
+            "pages": [
+              "support/help-tickets",
+              "support/faq"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API Reference",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "api/overview",
+              "api/authentication"
+            ]
+          },
+          {
+            "group": "Endpoints",
+            "pages": [
+              "api/students",
+              "api/enrollments",
+              "api/class-enrollments",
+              "api/settings",
+              "api/student-verification"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "Student enrollment and lifecycle management",
+    "Tuition billing, fees, and Statement of Account (SOA) generation",
+    "Weekly class scheduling and timetable visualization",
+    "Grade management with prelim, midterm, and final tracking",
+    "Faculty portal with class management, attendance, and grade submission",
+    "Digital student ID card",
+    "Configurable branding (logo, favicon, theme color, org name)",
+    "PWA support for mobile access",
+    "Announcement center and notification system",
+    "Help ticket / IT support system",
+    "Multi-school (multi-tenancy) organization switching",
+    "REST API with Sanctum token authentication",
+    "Modular architecture (Library, Cashier, Inventory, Announcements, Medical Records)"
+  ],
+  "publicApiSurface": [
+    "GET /api/v1/public/settings — Public website settings (unauthenticated)",
+    "GET /api/students — List students (paginated, filterable)",
+    "GET /api/students/{id} — Get student details",
+    "POST /api/students — Create student",
+    "PUT /api/students/{id} — Update student",
+    "DELETE /api/students/{id} — Delete student",
+    "POST /api/students/verify — Verify student by ID and email",
+    "GET /api/enrollments — List student enrollments",
+    "GET /api/enrollments/{id} — Get enrollment details",
+    "GET /api/enrollments/{id}/schedule — Get student schedule",
+    "GET /api/enrollments/{id}/assessment — Get tuition assessment",
+    "GET /api/enrollments/statistics/summary — Enrollment statistics",
+    "GET /api/class-enrollments — List class enrollments",
+    "PATCH /api/class-enrollments/{id}/grades — Update grades",
+    "POST /api/class-enrollments/{id}/finalize — Finalize grades",
+    "GET /api/settings/current — Current settings",
+    "GET /api/settings/key/{key} — Get specific setting value",
+    "PATCH /api/settings/user/preferences — Update user preferences",
+    "GET /api/organizations/current — Get current organization",
+    "POST /api/organizations/switch — Switch active organization"
+  ]
+}

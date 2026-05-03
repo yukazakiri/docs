@@ -1,0 +1,88 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "name": "KoAkademy",
+  "theme": "almond",
+  "colors": {
+    "primary": "#0f172a",
+    "light": "#e2e8f0",
+    "dark": "#0f172a"
+  },
+  "navbar": {
+    "primary": {
+      "type": "github",
+      "href": "https://github.com/yukazakiri/koakademy"
+    }
+  },
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction",
+              "quickstart"
+            ]
+          },
+          {
+            "group": "Student Portal",
+            "pages": [
+              "student-portal/dashboard",
+              "student-portal/enrollment",
+              "student-portal/academics",
+              "student-portal/finances",
+              "student-portal/digital-id"
+            ]
+          },
+          {
+            "group": "Faculty Portal",
+            "pages": [
+              "faculty-portal/overview",
+              "faculty-portal/classes",
+              "faculty-portal/grades",
+              "faculty-portal/attendance"
+            ]
+          },
+          {
+            "group": "Configuration",
+            "pages": [
+              "configuration/branding",
+              "configuration/academic-settings",
+              "configuration/modules"
+            ]
+          },
+          {
+            "group": "Help & Support",
+            "pages": [
+              "support/help-tickets",
+              "support/faq"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API Reference",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "api/overview",
+              "api/authentication"
+            ]
+          },
+          {
+            "group": "Endpoints",
+            "pages": [
+              "api/students",
+              "api/enrollments",
+              "api/class-enrollments",
+              "api/settings",
+              "api/student-verification"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

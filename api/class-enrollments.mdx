@@ -1,0 +1,143 @@
+---
+title: "REST API endpoints for class enrollments"
+description: "Manage class enrollment records, update and finalize grades, verify grade submissions, and run bulk grade updates across an entire class via the API."
+---
+
+Class enrollments represent the link between a student enrollment and a specific class section. Through this API you can manage those records and handle the full grade lifecycle — from initial entry to finalization and verification. All endpoints require a Bearer token — see [authentication](/api/authentication) to get started.
+
+## Base path
+
+```
+/api/class-enrollments
+```
+
+## Endpoints
+
+| Method | Path | Description |
+| --- | --- | --- |
+| `GET` | `/api/class-enrollments` | List class enrollments |
+| `GET` | `/api/class-enrollments/{id}` | Get a class enrollment |
+| `POST` | `/api/class-enrollments` | Create a class enrollment |
+| `PUT` | `/api/class-enrollments/{id}` | Update a class enrollment (full replace) |
+| `DELETE` | `/api/class-enrollments/{id}` | Soft-delete a class enrollment |
+| `POST` | `/api/class-enrollments/{id}/restore` | Restore a soft-deleted record |
+| `DELETE` | `/api/class-enrollments/{id}/force` | Permanently delete a record |
+| `PATCH` | `/api/class-enrollments/{id}/grades` | Update grades for a record |
+| `POST` | `/api/class-enrollments/{id}/finalize` | Finalize grades (locks the record) |
+| `POST` | `/api/class-enrollments/{id}/verify` | Verify finalized grades |
+| `GET` | `/api/class-enrollments/class/{classId}` | List all enrollments for a class |
+| `GET` | `/api/class-enrollments/class/{classId}/statistics` | Grade statistics for a class |
+| `PATCH` | `/api/class-enrollments/class/{classId}/bulk-grades` | Bulk update grades for a class |
+
+## Grade fields
+
+When submitting or updating grades, use the following numeric fields:
+
+| Field | Description |
+| --- | --- |
+| `prelim` | Preliminary grade (numeric) |
+| `midterm` | Midterm grade (numeric) |
+| `finals` | Final grade (numeric) |
+
+## PATCH /api/class-enrollments/{id}/grades
+
+Updates the grade entries for a single class enrollment record.
+
+**Request body**
+
+```json
+{
+  "prelim": 88.5,
+  "midterm": 91.0,
+  "finals": 85.0
+}
+```
+
+**Response** — `200 OK`
+
+```json
+{
+  "data": {
+    "id": 201,
+    "enrollment_id": 42,
+    "class_id": 101,
+    "student_id": "STU-2024-001",
+    "prelim": 88.5,
+    "midterm": 91.0,
+    "finals": 85.0,
+    "final_grade": 88.17,
+    "remarks": "Passed",
+    "updated_at": "2025-01-20T14:00:00Z"
+  }
+}
+```
+
+## GET /api/class-enrollments/class/{classId}/statistics
+
+Returns computed grade statistics across all students in a class.
+
+**Response**
+
+```json
+{
+  "data": {
+    "class_id": 101,
+    "subject_code": "CS101",
+    "total_enrolled": 35,
+    "graded": 35,
+    "statistics": {
+      "prelim": {
+        "min": 62.0,
+        "max": 98.0,
+        "average": 82.4
+      },
+      "midterm": {
+        "min": 65.0,
+        "max": 99.5,
+        "average": 85.1
+      },
+      "finals": {
+        "min": 60.0,
+        "max": 97.0,
+        "average": 81.9
+      },
+      "final_grade": {
+        "min": 63.0,
+        "max": 98.1,
+        "average": 83.1,
+        "passing_count": 32,
+        "failing_count": 3
+      }
+    }
+  }
+}
+```
+
+## PATCH /api/class-enrollments/class/{classId}/bulk-grades
+
+Submits grade updates for multiple students in a single request.
+
+**Request body**
+
+```json
+{
+  "grades": [
+    { "id": 201, "prelim": 88.5, "midterm": 91.0, "finals": 85.0 },
+    { "id": 202, "prelim": 75.0, "midterm": 78.5, "finals": 80.0 },
+    { "id": 203, "prelim": 92.0, "midterm": 95.0, "finals": 90.5 }
+  ]
+}
+```
+
+<Note>
+  Finalized grade records cannot be modified through the grades endpoints. Use `POST /api/class-enrollments/{id}/verify` to verify a finalized record.
+</Note>
+
+## Error codes
+
+| Status | Description |
+| --- | --- |
+| `401 Unauthorized` | Token is missing or expired |
+| `403 Forbidden` | Token lacks permission (e.g., grades already finalized) |
+| `404 Not Found` | No record found with the given `{id}` or `{classId}` |
+| `422 Unprocessable Entity` | Request body failed validation; check the `errors` field |

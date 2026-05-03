@@ -1,0 +1,73 @@
+---
+title: "Customize your school's branding"
+description: "Configure your school's name, logo, favicon, theme color, tagline, copyright text, and portal identity settings from the KoAkademy admin panel."
+---
+
+KoAkademy lets you tailor the platform to your institution's identity — from the name that appears in browser tabs and emails, to the logo students see when they log in. All branding settings live in the admin panel and take effect immediately after you save, with no redeploy required.
+
+## Where to find branding settings
+
+In the admin panel, go to **Site Settings**. All identity fields are organized in one place.
+
+## Fields you can configure
+
+### School identity
+
+- **App Name** — The full name displayed in browser tabs and outgoing system emails.
+- **App Short Name** — An abbreviated name used where space is limited (for example, mobile home screen labels).
+- **Organization Name** — Your institution's official name, used in formal contexts such as documents and headers.
+- **Organization Short Name** — A compact version of the organization name.
+- **Organization Address** — Your institution's mailing or campus address.
+
+### Contact information
+
+- **Support Email** — The address students and faculty see when they need to reach your IT or registrar team.
+- **Support Phone** — A phone number displayed alongside the support email.
+
+### Portal identity
+
+- **Tagline** — A short phrase that appears on the login screen. Use it to reinforce your school's identity or welcome message.
+- **Copyright text** — The copyright line shown in the portal footer.
+
+### Images
+
+- **Logo** — The primary image shown in the portal header and on print documents. Upload a square image for the best results across all display contexts.
+- **Favicon** — The small icon that appears in browser tabs and bookmarks. A 32×32 or 64×64 PNG or ICO file works well.
+- **Open Graph image** — The preview image shown when someone shares a link to your portal on social media or messaging apps.
+
+### Appearance
+
+- **Theme color** — A hex value (for example, `#1e3a5f`) applied to the PWA web app manifest and the browser chrome on supporting devices. This color also influences the "Add to Home Screen" experience on mobile.
+- **Auth layout** — Controls the visual layout of the login screen. The default is `split`, which shows your branding alongside the sign-in form.
+- **Currency** — The currency symbol and code used across billing displays. Defaults to **PHP**.
+
+## Portal-specific settings
+
+If your institution runs a dedicated student or public portal, you can set a separate identity for it:
+
+- **Portal name** — The name shown in the portal's title bar and metadata.
+- **Portal description** — A short description used in search engine results and link previews for the portal.
+- **Portal OG image** — An Open Graph image specific to the portal, separate from the main admin OG image.
+
+## Saving your changes
+
+After editing any field, click **Save** at the bottom of the Site Settings page. Changes apply to all users immediately — there is no need to restart or redeploy the application.
+
+<Note>
+  Logo and favicon uploads replace the previous files. If you need to revert, you must re-upload the original images.
+</Note>
+
+<Tip>
+  Use a square logo for the best results across all display contexts, including email headers, the PWA home screen icon, and the portal sidebar.
+</Tip>
+
+## Related pages
+
+<CardGroup cols={2}>
+  <Card title="Academic settings" icon="calendar" href="/configuration/academic-settings">
+    Set the active school year, semester, and enrollment periods.
+  </Card>
+  <Card title="Feature modules" icon="puzzle-piece" href="/configuration/modules">
+    Enable or disable optional features for your installation.
+  </Card>
+</CardGroup>

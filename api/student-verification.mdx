@@ -1,0 +1,195 @@
+---
+title: "POST /api/students/verify — student lookup"
+description: "Verify a student is registered by matching their student ID and email in one API call — useful for third-party integrations and access control."
+---
+
+The student verification endpoint lets you confirm whether a student exists in KoAkademy by matching a student ID against an email address. This is useful when you need to gate access to a third-party system — for example, an LMS, a library portal, or a payment gateway — and want to ensure the person logging in is a recognized, registered student before proceeding. Both fields must match exactly for the verification to succeed.
+
+## Endpoint
+
+```
+POST /api/students/verify
+```
+
+**Authentication:** Bearer token required — see [authentication](/api/authentication).
+
+## Request parameters
+
+<ParamField body="student_id" type="string" required>
+  The student's unique ID as stored in KoAkademy. Example: `"STU-2024-001"`.
+</ParamField>
+
+<ParamField body="email" type="string" required>
+  The student's registered email address. Must match exactly, including case.
+</ParamField>
+
+## Response fields
+
+<ResponseField name="message" type="string">
+  A human-readable description of the result, for example `"Student verified successfully."` or `"Student not found."`.
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  Present on a successful match. Contains the matched student record.
+
+  <Expandable title="data properties">
+    <ResponseField name="exists" type="boolean">
+      `true` if a matching student was found; `false` otherwise.
+    </ResponseField>
+    <ResponseField name="student_id" type="string">
+      The matched student's ID string.
+    </ResponseField>
+    <ResponseField name="email" type="string">
+      The matched student's email address.
+    </ResponseField>
+    <ResponseField name="full_name" type="string">
+      The student's full name as registered in KoAkademy.
+    </ResponseField>
+    <ResponseField name="status" type="string">
+      The student's current enrollment status. One of: `enrolled`, `applicant`, `withdrawn`, `dropped`, `graduate`.
+    </ResponseField>
+    <ResponseField name="student_type" type="string">
+      The student's program type. Either `"college"` or `"shs"` (Senior High School).
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Code examples
+
+<CodeGroup>
+
+```javascript javascript
+const response = await fetch('https://<your-domain>/api/students/verify', {
+  method: 'POST',
+  headers: {
+    'Authorization': `Bearer ${process.env.KOAKADEMY_API_TOKEN}`,
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    student_id: 'STU-2024-001',
+    email: 'maria.santos@example.com',
+  }),
+});
+
+const data = await response.json();
+
+if (response.ok && data.data?.exists) {
+  console.log('Verified:', data.data.full_name);
+} else {
+  console.log('Not found:', data.message);
+}
+```
+
+```python python
+import os
+import requests
+
+headers = {
+    'Authorization': f'Bearer {os.environ["KOAKADEMY_API_TOKEN"]}',
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+}
+
+payload = {
+    'student_id': 'STU-2024-001',
+    'email': 'maria.santos@example.com',
+}
+
+response = requests.post(
+    'https://<your-domain>/api/students/verify',
+    json=payload,
+    headers=headers,
+)
+
+data = response.json()
+
+if response.status_code == 200 and data['data']['exists']:
+    print('Verified:', data['data']['full_name'])
+else:
+    print('Not found:', data['message'])
+```
+
+```php php
+$token = getenv('KOAKADEMY_API_TOKEN');
+$payload = json_encode([
+    'student_id' => 'STU-2024-001',
+    'email'      => 'maria.santos@example.com',
+]);
+
+$ch = curl_init('https://<your-domain>/api/students/verify');
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer ' . $token,
+    'Content-Type: application/json',
+    'Accept: application/json',
+]);
+
+$body = curl_exec($ch);
+$statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+curl_close($ch);
+
+$data = json_decode($body, true);
+
+if ($statusCode === 200 && $data['data']['exists']) {
+    echo 'Verified: ' . $data['data']['full_name'];
+} else {
+    echo 'Not found: ' . $data['message'];
+}
+```
+
+</CodeGroup>
+
+## Success response — 200 OK
+
+```json
+{
+  "message": "Student verified successfully.",
+  "data": {
+    "exists": true,
+    "student_id": "STU-2024-001",
+    "email": "maria.santos@example.com",
+    "full_name": "Maria Santos",
+    "status": "enrolled",
+    "student_type": "college"
+  }
+}
+```
+
+## Not-found response — 404 Not Found
+
+```json
+{
+  "message": "Student not found.",
+  "data": {
+    "exists": false
+  }
+}
+```
+
+## Validation error — 422 Unprocessable Entity
+
+```json
+{
+  "message": "The given data was invalid.",
+  "errors": {
+    "student_id": ["The student id field is required."],
+    "email": ["The email field must be a valid email address."]
+  }
+}
+```
+
+<Note>
+  Both `student_id` and `email` must match the same student record exactly. Providing a valid `student_id` paired with a mismatched email returns a `404`, not a partial match.
+</Note>
+
+## Error codes
+
+| Status | Description |
+| --- | --- |
+| `401 Unauthorized` | Token is missing or expired |
+| `403 Forbidden` | Token lacks permission to use the verify endpoint |
+| `404 Not Found` | No student found matching both `student_id` and `email` |
+| `422 Unprocessable Entity` | One or both fields failed validation; check the `errors` field |
