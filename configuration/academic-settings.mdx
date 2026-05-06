@@ -51,6 +51,37 @@ KoAkademy supports two distinct academic tracks. Enable the ones that apply to y
   </Card>
 </CardGroup>
 
+## Available courses for new applicants
+
+By default, every active course in your catalog appears on the public enrollment form. If you only want new applicants to apply for a subset of programs — for example, while a department is at capacity or while a new program is being rolled out — you can restrict the form to a curated list of courses without deactivating those programs elsewhere in the system.
+
+<Steps>
+  <Step title="Open the enrollment pipeline settings">
+    In the admin panel, go to **System Management** and select **Enrollment Pipeline**.
+  </Step>
+  <Step title="Find the available courses card">
+    Scroll to **Available Courses for New Applicants**. The card lists every active course in your catalog with a checkbox next to each one.
+  </Step>
+  <Step title="Choose which courses to expose">
+    Use the search box to filter by code or title, then check the courses you want to make available on the public enrollment form. Use **Select All** or **Clear** to bulk-update your selection.
+  </Step>
+  <Step title="Save your changes">
+    Submit the enrollment pipeline form to apply your selection. The public form updates immediately for new applicants.
+  </Step>
+</Steps>
+
+<Note>
+  Leave the selection empty to fall back to the default behavior: all active courses are shown to new applicants.
+</Note>
+
+The allowlist applies only to the public, new-applicant enrollment form. Existing students, continuing enrollees, and internal admin tools are not affected — staff can still assign students to any active course, and registrar workflows continue to see your full catalog.
+
+If an applicant somehow submits an enrollment for a course that is not on the allowlist (for example, by reusing an old link), the server rejects the submission with an inline error so the application is never created.
+
+<Tip>
+  Combine the course allowlist with the [enrollment period control](#enrollment-period-control) when you want to soft-launch new programs: open enrollment to one or two cohorts first, then expand the list once you are ready for the full intake.
+</Tip>
+
 ## Multi-school (organization) setup
 
 If your institution has multiple campuses or schools, each can be configured as a separate **organization** in KoAkademy. Faculty and students assigned to more than one organization can switch between them without logging out.
