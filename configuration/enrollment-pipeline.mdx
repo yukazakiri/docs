@@ -1,0 +1,87 @@
+---
+title: "Enrollment pipeline and applicant automation"
+description: "Configure the enrollment pipeline steps and turn on automation that creates enrollment records and assigns subjects when new applicants apply."
+---
+
+The enrollment pipeline defines the stages every application moves through after a student submits the enrollment form. From the same settings page, you can also turn on **Applicant Automation** to remove manual setup work for new applicants — automatically creating enrollment records and pre-assigning available subjects and class sections based on the applicant's chosen course.
+
+## Opening the enrollment pipeline settings
+
+<Steps>
+  <Step title="Open the admin panel">
+    Log in as an administrator and navigate to **System Management**.
+  </Step>
+  <Step title="Go to Enrollment Pipeline">
+    Select **Enrollment Pipeline** to see the pipeline steps, status labels, and automation controls.
+  </Step>
+</Steps>
+
+## Applicant automation
+
+The **Applicant Automation** card controls what KoAkademy does behind the scenes the moment a new student application is submitted. By default, all automation is off and applicants are processed manually through the pipeline.
+
+Automation is built around three toggles. Each toggle depends on the one above it, so you only see deeper options after you enable the preceding toggle.
+
+### Treat new applicants as 1st year automatically
+
+Enable this toggle when most of your new applicants are incoming first-year students. With it on, KoAkademy uses the first-year curriculum as the default basis for any other applicant automation you turn on later.
+
+When this toggle is off, the rest of the automation options are hidden and every applicant is handled manually by your registrar.
+
+<Note>
+  Turning this toggle off automatically disables **Auto-create Student Enrollment record** and **Auto-assign available subjects/classes**, since they both rely on the first-year baseline.
+</Note>
+
+### Auto-create Student Enrollment record
+
+When this toggle is on, KoAkademy creates a dedicated `StudentEnrollment` record for every new applicant as soon as their application is saved. The record uses:
+
+- The applicant's chosen course
+- The system default school year (for example, `2026 - 2027`)
+- The system default semester
+- Year level **1** when first-year treatment is enabled, otherwise the year level submitted in the form
+
+If a matching enrollment record already exists for the student, course, school year, and semester, KoAkademy reuses it instead of creating a duplicate.
+
+<Tip>
+  Use this toggle on its own when you want a confirmed enrollment record up front but still prefer to assign subjects and class sections manually.
+</Tip>
+
+### Auto-assign available subjects/classes
+
+This toggle is only available after **Auto-create Student Enrollment record** is on. With it enabled, KoAkademy:
+
+1. Loads every subject for the applicant's course that matches the target year level and current semester.
+2. Adds each subject to the new enrollment record, calculating lecture and laboratory fees from the course's per-unit rates.
+3. Searches for an open class section for each subject in the active school year and semester. The first section that has remaining slots — or any section without a slot limit — is assigned to the student.
+4. Creates the corresponding class enrollment record so the applicant appears on faculty class lists immediately.
+5. Generates a `StudentTuition` record for the enrollment with no discount, no downpayment, and no extra fees, so cashiers can collect payment right away.
+
+If no open class section is found for a subject, the subject is still assigned to the enrollment but no class section is attached. Your registrar can place the student into a section later.
+
+<Warning>
+  Only enable auto-assign subjects when your subjects, courses, and class sections are fully configured for the active school year and semester. Otherwise, applicants may end up with incomplete subject lists and unassigned sections.
+</Warning>
+
+## Recommended configurations
+
+| Scenario | Treat new applicants as 1st year | Auto-create enrollment record | Auto-assign subjects |
+|---|---|---|---|
+| Manual review of every applicant | Off | Off | Off |
+| Block enrollment slots early, assign subjects later | On | On | Off |
+| Fully automated first-year intake | On | On | On |
+
+## Saving your changes
+
+After toggling the automation options, scroll down and click **Save** at the bottom of the Enrollment Pipeline page. Changes take effect immediately for the next applicant who submits the enrollment form.
+
+## Related pages
+
+<CardGroup cols={2}>
+  <Card title="Academic settings" icon="calendar" href="/configuration/academic-settings">
+    Set the active school year, semester, and enrollment window that auto-enrollment relies on.
+  </Card>
+  <Card title="How students enroll" icon="user-plus" href="/student-portal/enrollment">
+    See the applicant journey that triggers the automation.
+  </Card>
+</CardGroup>
