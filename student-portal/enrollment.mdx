@@ -70,6 +70,39 @@ If you are already registered in KoAkademy and are enrolling for a new term, use
 
 When you reach the subject selection step, the portal loads only the subjects that apply to your course and year level. You will not see subjects outside your curriculum. If a subject you expect to see is missing, contact your registrar — it may need to be added to your curriculum by an administrator.
 
+## Family income
+
+The enrollment form asks for your family's income range so the institution can assess eligibility for scholarships, discounts, and support programs. You answer in three small steps.
+
+<Steps>
+  <Step title="Pick an income basis">
+    Choose **Annual Income** or **Monthly Income** under **Income Basis**. The bracket options below this field update to match the basis you select. If you change the basis later, any bracket you already selected is cleared so you can pick a fresh range.
+  </Step>
+  <Step title="Decide whether to enter one or two brackets">
+    Select **Father and mother have the same income bracket** if both parents earn within the same range. Clear the checkbox if their incomes fall into different ranges so you can record each parent separately.
+  </Step>
+  <Step title="Select the bracket(s)">
+    With the checkbox selected, pick a single **Family Income Bracket**. With the checkbox cleared, pick a **Father's Income Bracket** and a **Mother's Income Bracket**. All bracket options come from the same income basis you chose in step 1.
+  </Step>
+</Steps>
+
+<Note>
+  The default income basis is **Annual Income**. Your institution can change the default and customize the available brackets in `config/income_brackets.php`. See [academic settings](/configuration/academic-settings) if you administer the portal.
+</Note>
+
+### Income bracket fields
+
+| Field | When it is required |
+| --- | --- |
+| **Income Basis** | Always required. Determines which brackets you can pick from. |
+| **Family Income Bracket** | Required when **Father and mother have the same income bracket** is selected. |
+| **Father's Income Bracket** | Required when the same-bracket checkbox is cleared. |
+| **Mother's Income Bracket** | Required when the same-bracket checkbox is cleared. |
+
+<Tip>
+  If you are unsure which bracket to choose, pick the range closest to your family's typical earnings. The registrar can adjust the value later if your records show otherwise.
+</Tip>
+
 ## Enrollment statuses
 
 After you submit your application, your account is assigned an enrollment status. The table below describes what each status means.
