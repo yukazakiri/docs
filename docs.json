@@ -49,7 +49,8 @@
             "pages": [
               "configuration/branding",
               "configuration/academic-settings",
-              "configuration/modules"
+              "configuration/modules",
+              "configuration/announcements"
             ]
           },
           {
