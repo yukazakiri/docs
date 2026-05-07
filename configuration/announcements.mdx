@@ -1,0 +1,143 @@
+---
+title: "Send targeted announcements to students and staff"
+description: "Use visibility scope, audience roles, and display locations to broadcast announcements to the right people on the right pages of your portal."
+---
+
+Announcements let you publish messages to your portal — anything from enrollment reminders to weather advisories. With targeting, you can decide **who** sees an announcement and **where** it appears, so the right message reaches the right audience without cluttering pages for users it doesn't apply to.
+
+## Where to find announcements
+
+In the admin panel, go to **Announcements**. The list shows every announcement with its status, priority, and schedule. Click **New announcement** to create one or select an existing entry to edit it.
+
+<Note>
+  Announcements are an optional module. If you don't see them in the admin panel, enable the **Announcements** module in **Modules**. See [Feature modules](/configuration/modules).
+</Note>
+
+## Compose an announcement
+
+Each announcement has three sections.
+
+### Announcement details
+
+- **Title** — Headline shown in the banner, toast, or modal.
+- **Slug** — URL-safe identifier auto-generated from the title. You can override it.
+- **Content** — Rich-text body. Use formatting, lists, and links to expand on the title.
+
+### Settings
+
+| Field | What it controls |
+| --- | --- |
+| **Type** | Visual style: `info`, `warning`, `danger`, `success`, `maintenance`, `enrollment`, or `update`. |
+| **Priority** | `urgent`, `high`, `medium`, or `low`. Higher priorities sort first in banners. |
+| **Status** | `draft`, `published`, or `archived`. Only published announcements are shown. |
+| **Display mode** | How the announcement appears: `banner`, `toast`, or `modal`. |
+| **Requires acknowledgment** | When on, users must dismiss the message before continuing. |
+| **Link** | Optional URL — full (`https://...`) or internal path (`/enrollment`). |
+| **Action label** | Button text shown when a link is present. |
+
+### Scheduling
+
+- **Publish at** — Leave empty to publish immediately, or pick a future date.
+- **Expires at** — Leave empty for no expiration. After this time, the announcement stops appearing.
+
+## Target the right audience
+
+Use **Visibility scope** together with **Audience roles** to control who sees the announcement.
+
+### Visibility scope
+
+| Scope | Who sees it |
+| --- | --- |
+| **Global** | Everyone, signed in or not. |
+| **Authenticated users only** | Anyone who is signed in. |
+| **Guests only** | Visitors who are not signed in. |
+| **Role based** | Only the roles you select in **Audience roles**. |
+
+### Audience roles
+
+Optional when the scope is global, authenticated, or guests only — leaving it empty allows all roles within that scope. Required when the scope is **Role based**.
+
+Available roles:
+
+- `guest` — Visitors who are not signed in.
+- `authenticated` — Any signed-in user.
+- `admin` — Administrators.
+- `student` — Enrolled students.
+- `faculty` — Teaching staff.
+
+## Choose where it appears
+
+**Display locations** lets you pin an announcement to specific pages or layouts. Pick one or more:
+
+- **All pages** — Show wherever announcements render.
+- **Login page** — The sign-in screen.
+- **Signup page** — The account-creation screen.
+- **Enrollment page** — The public enrollment form.
+- **Public home page** — The portal landing page.
+- **Admin layouts** — Pages inside the admin panel.
+- **Student layouts** — Pages inside the student portal.
+- **Faculty layouts** — Pages inside the faculty portal.
+
+If you leave display locations empty, the announcement falls back to **All pages**.
+
+## Examples
+
+<AccordionGroup>
+  <Accordion title="Open enrollment to guests and prospective students">
+    - **Visibility scope:** Global
+    - **Audience roles:** `guest`, `authenticated`, `student`, `faculty`
+    - **Display locations:** Enrollment page, Login page, Signup page, Student layouts, Faculty layouts
+    - **Link:** `/enrollment`
+    - **Action label:** `Enroll now`
+  </Accordion>
+  <Accordion title="Class suspension advisory for everyone">
+    - **Visibility scope:** Global
+    - **Audience roles:** Leave empty
+    - **Display locations:** All pages
+    - **Type:** `warning`
+    - **Priority:** `urgent`
+  </Accordion>
+  <Accordion title="Tuition reminder for students only">
+    - **Visibility scope:** Role based
+    - **Audience roles:** `student`
+    - **Display locations:** Student layouts
+    - **Link:** `/student/tuition`
+    - **Action label:** `View tuition`
+  </Accordion>
+  <Accordion title="Grade submission reminder for faculty only">
+    - **Visibility scope:** Role based
+    - **Audience roles:** `faculty`
+    - **Display locations:** Faculty layouts
+    - **Link:** `/faculty/classes`
+    - **Action label:** `Open classes`
+  </Accordion>
+</AccordionGroup>
+
+<Tip>
+  Combine **Priority** with **Display mode** to make critical messages stand out. Use `urgent` priority with `modal` mode for items that require immediate attention, and reserve `banner` for ambient reminders.
+</Tip>
+
+## How targeting is evaluated
+
+When the portal loads a page, it asks for announcements that match both the current viewer and the current location:
+
+1. The viewer's role is checked against the announcement's **Visibility scope** and **Audience roles**.
+2. The current page is checked against the announcement's **Display locations**. An announcement set to **All pages** matches every location.
+3. Only published, active announcements within their schedule window are returned.
+
+If any of these checks fail, the announcement is hidden for that viewer on that page.
+
+<Warning>
+  Announcements with no audience roles selected and a **Role based** scope match no one. Either pick at least one role or change the scope.
+</Warning>
+
+## Related pages
+
+<CardGroup cols={2}>
+  <Card title="Feature modules" icon="puzzle-piece" href="/configuration/modules">
+    Enable or disable the Announcements module.
+  </Card>
+  <Card title="Branding settings" icon="paintbrush" href="/configuration/branding">
+    Configure how announcements look alongside your portal identity.
+  </Card>
+</CardGroup>
