@@ -51,36 +51,55 @@ KoAkademy supports two distinct academic tracks. Enable the ones that apply to y
   </Card>
 </CardGroup>
 
-## Available courses for new applicants
+## Income brackets for enrollment
 
-By default, every active course in your catalog appears on the public enrollment form. If you only want new applicants to apply for a subset of programs — for example, while a department is at capacity or while a new program is being rolled out — you can restrict the form to a curated list of courses without deactivating those programs elsewhere in the system.
+The enrollment form asks new students to record their family income range. KoAkademy ships with two income basis modes — **Annual Income** and **Monthly Income** — each with its own list of brackets. Students choose the basis at enrollment and then pick either a single shared family bracket or separate ranges for the father and mother.
 
-<Steps>
-  <Step title="Open the enrollment pipeline settings">
-    In the admin panel, go to **System Management** and select **Enrollment Pipeline**.
-  </Step>
-  <Step title="Find the available courses card">
-    Scroll to **Available Courses for New Applicants**. The card lists every active course in your catalog with a checkbox next to each one.
-  </Step>
-  <Step title="Choose which courses to expose">
-    Use the search box to filter by code or title, then check the courses you want to make available on the public enrollment form. Use **Select All** or **Clear** to bulk-update your selection.
-  </Step>
-  <Step title="Save your changes">
-    Submit the enrollment pipeline form to apply your selection. The public form updates immediately for new applicants.
-  </Step>
-</Steps>
+You can change the default basis and the bracket lists in `config/income_brackets.php`. Each bracket has a `min`, `max`, and a `label`. Use `{symbol}` in labels — KoAkademy replaces it with the currency symbol from your site settings at runtime.
 
-<Note>
-  Leave the selection empty to fall back to the default behavior: all active courses are shown to new applicants.
-</Note>
+```php config/income_brackets.php
+return [
+    'default_mode' => 'annual',
+    'modes' => [
+        'annual' => [
+            'label' => 'Annual Income',
+            'brackets' => [
+                'below_250k' => [
+                    'label' => '{symbol}250,000 and below',
+                    'min' => 0,
+                    'max' => 250_000,
+                ],
+                // ...add more brackets here
+            ],
+        ],
+        'monthly' => [
+            'label' => 'Monthly Income',
+            'brackets' => [
+                'below_10k' => [
+                    'label' => 'Less than {symbol}10,000',
+                    'min' => 0,
+                    'max' => 9_999,
+                ],
+                // ...add more brackets here
+            ],
+        ],
+    ],
+];
+```
 
-The allowlist applies only to the public, new-applicant enrollment form. Existing students, continuing enrollees, and internal admin tools are not affected — staff can still assign students to any active course, and registrar workflows continue to see your full catalog.
-
-If an applicant somehow submits an enrollment for a course that is not on the allowlist (for example, by reusing an old link), the server rejects the submission with an inline error so the application is never created.
+| Key | Description |
+| --- | --- |
+| `default_mode` | The mode pre-selected on the enrollment form. Must match a key under `modes`. |
+| `modes.<key>.label` | Display label for the basis option (for example, `Annual Income`). |
+| `modes.<key>.brackets` | Ordered list of bracket options shown when this basis is selected. |
 
 <Tip>
-  Combine the course allowlist with the [enrollment period control](#enrollment-period-control) when you want to soft-launch new programs: open enrollment to one or two cohorts first, then expand the list once you are ready for the full intake.
+  Add new modes (such as a quarterly basis) by adding another entry under `modes`. Any mode you add automatically appears in the **Income Basis** dropdown on the enrollment form.
 </Tip>
+
+<Note>
+  Each enrollment record stores the basis (`income_bracket_mode`), whether both parents share a bracket (`use_same_parent_income`), and the selected bracket keys (`family_income_bracket`, `father_income_bracket`, `mother_income_bracket`). Changing a bracket key in config does not retroactively update existing records.
+</Note>
 
 ## Multi-school (organization) setup
 
@@ -105,8 +124,14 @@ If your institution has multiple campuses or schools, each can be configured as 
 ## Related pages
 
 <CardGroup cols={2}>
+  <Card title="Enrollment pipeline" icon="route" href="/configuration/enrollment-pipeline">
+    Configure pipeline steps and automate enrollment for new applicants.
+  </Card>
   <Card title="Branding settings" icon="paintbrush" href="/configuration/branding">
     Configure your school's name, logo, and visual identity.
+  </Card>
+  <Card title="Enrollment pipeline" icon="diagram-project" href="/configuration/enrollment-pipeline">
+    Define enrollment stages and automate enrollment record creation for new applicants.
   </Card>
   <Card title="Feature modules" icon="puzzle-piece" href="/configuration/modules">
     Enable or disable optional features for your installation.

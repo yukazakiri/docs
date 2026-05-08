@@ -1,0 +1,114 @@
+---
+title: "Target announcements to specific audiences and pages"
+description: "Use visibility scope, audience roles, and display locations to control exactly who sees each announcement and where it appears across the KoAkademy portal."
+---
+
+Announcements broadcast time-sensitive messages to people using your portal. Instead of showing every announcement to everyone, you can scope each one to a specific audience and choose the pages where it appears. This keeps the message relevant to readers and reduces noise on dashboards that already display a lot of information.
+
+## Where to find announcement settings
+
+In the admin panel, go to **Announcements**, then create a new announcement or open an existing one. The targeting fields live in the **Settings** section of the form alongside type, priority, and display mode.
+
+## Targeting fields
+
+### Visibility scope
+
+**Visibility scope** controls who is allowed to see the announcement based on their authentication state.
+
+- **Global** — Show to everyone, signed in or not. Use for institution-wide notices such as holidays or maintenance windows.
+- **Authenticated users only** — Show only to users who are signed in. Use for portal-specific guidance that does not apply to public visitors.
+- **Guests only** — Show only to visitors who are not signed in. Use for sign-up promotions or public enrollment notices.
+- **Role based** — Restrict the announcement to specific roles selected in **Audience roles**.
+
+The default is **Global**.
+
+### Audience roles
+
+**Audience roles** narrow visibility to one or more roles. The field accepts multiple values and is optional — leave it empty to allow everyone permitted by the visibility scope.
+
+Available roles:
+
+- `guest`
+- `authenticated`
+- `admin`
+- `student`
+- `faculty`
+
+Choose **Role based** as the visibility scope when you want only the selected roles to see the announcement. For example, select `faculty` to publish a notice that only faculty members will see.
+
+### Display locations
+
+**Display locations** decide where the announcement renders. Pick one or more locations:
+
+- **All pages** — Render anywhere announcements are supported.
+- **Login page** — Show on the sign-in screen.
+- **Signup page** — Show during account creation.
+- **Enrollment page** — Show on the enrollment workflow.
+- **Public home page** — Show on the public-facing landing page.
+- **Admin layouts** — Show inside the admin portal.
+- **Student layouts** — Show inside the student portal.
+- **Faculty layouts** — Show inside the faculty portal.
+
+The default is **All pages**. Combine specific locations to place a message only where it is relevant — for example, **Login page** plus **Signup page** for an authentication-only banner.
+
+## Call to action
+
+When an announcement links to a related page, you can label the action so readers know what to expect.
+
+- **Link** — A full URL (`https://...`) or an internal path (`/enrollment`).
+- **Action label** — Optional button text shown next to the link, up to 80 characters. Leave it empty to display the link without a labeled button.
+
+Use action labels such as **Enroll now**, **View schedule**, or **Read the full notice** to make the next step clear.
+
+## Example: faculty-only enrollment reminder
+
+Configure an announcement so only faculty members see a reminder, and only inside the faculty portal:
+
+| Field | Value |
+| --- | --- |
+| Title | Submit final grades by Friday |
+| Type | Information |
+| Priority | High |
+| Visibility scope | Role based |
+| Audience roles | `faculty` |
+| Display locations | Faculty layouts |
+| Link | `/faculty/grades` |
+| Action label | Open grade submission |
+
+Students and admins will not see this announcement, and it will not appear on the public landing page.
+
+## Example: public enrollment promotion
+
+Promote enrollment to visitors browsing your public site:
+
+| Field | Value |
+| --- | --- |
+| Title | Enrollment is open for the new term |
+| Type | Enrollment |
+| Visibility scope | Guests only |
+| Display locations | Public home page, Login page, Signup page |
+| Link | `/enrollment` |
+| Action label | Start your application |
+
+Authenticated users in the portal will not see this banner.
+
+## Tips
+
+<Tip>
+  Pair **Visibility scope** with **Audience roles** for the most precise targeting. Set the scope to **Role based** and pick the exact roles that should see the announcement.
+</Tip>
+
+<Note>
+  Leaving **Audience roles** empty when the scope is **Role based** falls back to allowing all roles permitted by the scope. Always select at least one role when you want strict role targeting.
+</Note>
+
+## Related pages
+
+<CardGroup cols={2}>
+  <Card title="Feature modules" icon="puzzle-piece" href="/configuration/modules">
+    Enable or disable the Announcements module for your installation.
+  </Card>
+  <Card title="Branding settings" icon="paintbrush" href="/configuration/branding">
+    Configure your school's name, logo, and visual identity.
+  </Card>
+</CardGroup>
