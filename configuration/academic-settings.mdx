@@ -51,6 +51,56 @@ KoAkademy supports two distinct academic tracks. Enable the ones that apply to y
   </Card>
 </CardGroup>
 
+## Income brackets for enrollment
+
+The enrollment form asks new students to record their family income range. KoAkademy ships with two income basis modes — **Annual Income** and **Monthly Income** — each with its own list of brackets. Students choose the basis at enrollment and then pick either a single shared family bracket or separate ranges for the father and mother.
+
+You can change the default basis and the bracket lists in `config/income_brackets.php`. Each bracket has a `min`, `max`, and a `label`. Use `{symbol}` in labels — KoAkademy replaces it with the currency symbol from your site settings at runtime.
+
+```php config/income_brackets.php
+return [
+    'default_mode' => 'annual',
+    'modes' => [
+        'annual' => [
+            'label' => 'Annual Income',
+            'brackets' => [
+                'below_250k' => [
+                    'label' => '{symbol}250,000 and below',
+                    'min' => 0,
+                    'max' => 250_000,
+                ],
+                // ...add more brackets here
+            ],
+        ],
+        'monthly' => [
+            'label' => 'Monthly Income',
+            'brackets' => [
+                'below_10k' => [
+                    'label' => 'Less than {symbol}10,000',
+                    'min' => 0,
+                    'max' => 9_999,
+                ],
+                // ...add more brackets here
+            ],
+        ],
+    ],
+];
+```
+
+| Key | Description |
+| --- | --- |
+| `default_mode` | The mode pre-selected on the enrollment form. Must match a key under `modes`. |
+| `modes.<key>.label` | Display label for the basis option (for example, `Annual Income`). |
+| `modes.<key>.brackets` | Ordered list of bracket options shown when this basis is selected. |
+
+<Tip>
+  Add new modes (such as a quarterly basis) by adding another entry under `modes`. Any mode you add automatically appears in the **Income Basis** dropdown on the enrollment form.
+</Tip>
+
+<Note>
+  Each enrollment record stores the basis (`income_bracket_mode`), whether both parents share a bracket (`use_same_parent_income`), and the selected bracket keys (`family_income_bracket`, `father_income_bracket`, `mother_income_bracket`). Changing a bracket key in config does not retroactively update existing records.
+</Note>
+
 ## Multi-school (organization) setup
 
 If your institution has multiple campuses or schools, each can be configured as a separate **organization** in KoAkademy. Faculty and students assigned to more than one organization can switch between them without logging out.
@@ -76,6 +126,9 @@ If your institution has multiple campuses or schools, each can be configured as 
 <CardGroup cols={2}>
   <Card title="Branding settings" icon="paintbrush" href="/configuration/branding">
     Configure your school's name, logo, and visual identity.
+  </Card>
+  <Card title="Enrollment pipeline" icon="diagram-project" href="/configuration/enrollment-pipeline">
+    Define enrollment stages and automate enrollment record creation for new applicants.
   </Card>
   <Card title="Feature modules" icon="puzzle-piece" href="/configuration/modules">
     Enable or disable optional features for your installation.
