@@ -23,10 +23,34 @@ If you are enrolling in KoAkademy for the first time, follow these steps to subm
   <Step title="Select your course and strand">
     Choose your program, course, and strand (if applicable). The available options depend on what your institution offers.
   </Step>
+  <Step title="Select your family income bracket">
+    In the **Family Income** section, choose the option that best matches your family's approximate monthly income. This is optional but helps the registrar assess your eligibility for scholarships, financial aid, and other support programs.
+  </Step>
   <Step title="Submit your application">
     Review your details and click **Submit**. Your application will be sent to the registrar for review.
   </Step>
 </Steps>
+
+### Family income brackets
+
+The **Monthly Income Bracket** dropdown lists ten ranges, from less than 10,000 up to more than 2,000,000 in your institution's configured currency. Currency symbols in each label are rendered automatically — for example, a Philippine peso institution shows `₱10,000 - ₱20,000`, while a US dollar institution shows `$10,000 - $20,000`.
+
+| Value | Range |
+| --- | --- |
+| `below_10k` | Less than 10,000 |
+| `10k_to_20k` | 10,000 – 20,000 |
+| `20k_to_40k` | 20,000 – 40,000 |
+| `40k_to_80k` | 40,000 – 80,000 |
+| `80k_to_150k` | 80,000 – 150,000 |
+| `150k_to_250k` | 150,000 – 250,000 |
+| `250k_to_500k` | 250,000 – 500,000 |
+| `500k_to_1m` | 500,000 – 1,000,000 |
+| `1m_to_2m` | 1,000,000 – 2,000,000 |
+| `above_2m` | More than 2,000,000 |
+
+<Note>
+  Your selection is saved on your student record and is visible only to your registrar and authorized staff. Leave the field as **Select income range...** if you prefer not to disclose this information.
+</Note>
 
 ### What happens after you submit
 
@@ -69,6 +93,39 @@ If you are already registered in KoAkademy and are enrolling for a new term, use
 ## Subject selection
 
 When you reach the subject selection step, the portal loads only the subjects that apply to your course and year level. You will not see subjects outside your curriculum. If a subject you expect to see is missing, contact your registrar — it may need to be added to your curriculum by an administrator.
+
+## Family income
+
+The enrollment form asks for your family's income range so the institution can assess eligibility for scholarships, discounts, and support programs. You answer in three small steps.
+
+<Steps>
+  <Step title="Pick an income basis">
+    Choose **Annual Income** or **Monthly Income** under **Income Basis**. The bracket options below this field update to match the basis you select. If you change the basis later, any bracket you already selected is cleared so you can pick a fresh range.
+  </Step>
+  <Step title="Decide whether to enter one or two brackets">
+    Select **Father and mother have the same income bracket** if both parents earn within the same range. Clear the checkbox if their incomes fall into different ranges so you can record each parent separately.
+  </Step>
+  <Step title="Select the bracket(s)">
+    With the checkbox selected, pick a single **Family Income Bracket**. With the checkbox cleared, pick a **Father's Income Bracket** and a **Mother's Income Bracket**. All bracket options come from the same income basis you chose in step 1.
+  </Step>
+</Steps>
+
+<Note>
+  The default income basis is **Annual Income**. Your institution can change the default and customize the available brackets in `config/income_brackets.php`. See [academic settings](/configuration/academic-settings) if you administer the portal.
+</Note>
+
+### Income bracket fields
+
+| Field | When it is required |
+| --- | --- |
+| **Income Basis** | Always required. Determines which brackets you can pick from. |
+| **Family Income Bracket** | Required when **Father and mother have the same income bracket** is selected. |
+| **Father's Income Bracket** | Required when the same-bracket checkbox is cleared. |
+| **Mother's Income Bracket** | Required when the same-bracket checkbox is cleared. |
+
+<Tip>
+  If you are unsure which bracket to choose, pick the range closest to your family's typical earnings. The registrar can adjust the value later if your records show otherwise.
+</Tip>
 
 ## Enrollment statuses
 

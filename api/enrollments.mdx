@@ -27,6 +27,18 @@ The enrollments API lets you manage a student's enrollment record for a given ac
 | `GET` | `/api/enrollments/{id}/assessment` | Get the tuition fee assessment |
 | `GET` | `/api/enrollments/statistics/summary` | Enrollment statistics summary |
 
+## Optional equity fields
+
+When creating an enrollment through the public registration form, you can include an optional `family_income_bracket` field on the request body. The value must match one of the keys configured in the institution's income bracket list (for example, `below_10k`, `40k_to_80k`, or `above_2m`). The selected bracket is stored on the student record and used by the registrar for scholarship and financial-aid eligibility review.
+
+```json
+{
+  "family_income_bracket": "40k_to_80k"
+}
+```
+
+If the field is omitted or sent as `null`, no income bracket is recorded. Sending a value that is not in the configured list returns `422 Unprocessable Entity`.
+
 ## GET /api/enrollments/{id}/schedule
 
 Returns the list of classes the enrolled student is scheduled for in the current term.
