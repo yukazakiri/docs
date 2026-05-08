@@ -1,0 +1,30 @@
+---
+title: "Changelog"
+description: "What's new in KoAkademy. Follow product updates, improvements, and fixes shipping each week."
+---
+
+<Update label="May 8, 2026" tags={["enrollment", "announcements"]}>
+  ## New features
+
+  **Targeted announcements**
+
+  Announcements can now be scoped to specific audiences and pages. Choose a **visibility scope** (Global, Authenticated, Guests, or Role based), pick **audience roles** like `student` or `faculty`, and select **display locations** such as the login page, public home page, or admin layouts. You can also attach a labeled call-to-action button so readers know what to do next. [Learn more](/configuration/announcements).
+
+  **Applicant enrollment automation**
+
+  A new **Applicant Automation** card on the Enrollment Pipeline page removes manual setup work for new applicants. Three opt-in toggles let you treat new applicants as 1st year by default, auto-create a `StudentEnrollment` record on submission, and auto-assign available subjects, class sections, and a tuition record based on the applicant's chosen course. Each toggle is independent so you can roll out automation gradually. [Learn more](/configuration/enrollment-pipeline).
+
+  **Family income on enrollment**
+
+  The new student enrollment form now collects family income to help registrars assess scholarships and financial aid eligibility. Students choose between **Annual** or **Monthly** income basis, then either enter a single shared bracket or separate brackets for each parent. Income data is private to the registrar and authorized staff. [Learn more](/student-portal/enrollment#family-income).
+
+  ## Updates
+
+  **Course allowlist for new applicants**
+
+  Registrars can now curate a shorter list of courses that are open to new applicants for the term. Applicants only see allowed courses on the enrollment form, while continuing students keep full access to their existing program. [Learn more](/student-portal/enrollment).
+
+  **Configurable income brackets**
+
+  Institutions can customize the available income brackets and default basis (annual or monthly) to match their region and currency. Currency symbols in bracket labels render automatically based on your site settings. [Learn more](/configuration/academic-settings#income-brackets-for-enrollment).
+</Update>
