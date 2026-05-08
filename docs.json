@@ -49,8 +49,8 @@
             "pages": [
               "configuration/branding",
               "configuration/academic-settings",
-              "configuration/modules",
-              "configuration/announcements"
+              "configuration/enrollment-pipeline",
+              "configuration/modules"
             ]
           },
           {
