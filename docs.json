@@ -55,6 +55,14 @@
             ]
           },
           {
+            "group": "Self-hosting",
+            "pages": [
+              "self-hosting/quick-start",
+              "self-hosting/deployment",
+              "self-hosting/development"
+            ]
+          },
+          {
             "group": "Help & Support",
             "pages": [
               "support/help-tickets",
