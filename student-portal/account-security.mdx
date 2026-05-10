@@ -1,0 +1,83 @@
+---
+title: "Account security and two-factor authentication"
+description: "Protect your KoAkademy account with two-factor authentication. Learn how to enable 2FA, choose a verification method, and turn the challenge off when needed."
+---
+
+KoAkademy adds a second verification step at sign-in to keep your account safe even if your password is compromised. Two-factor authentication (2FA) is on by default for every account, and you can choose how you complete the challenge — an authenticator app, an emailed code, a passkey, or a recovery code.
+
+This page explains how the 2FA challenge works, how to enable or disable it, and what to do if you lose access to your verification method.
+
+## How the challenge works
+
+After you submit a correct password, KoAkademy checks whether 2FA is enabled on your account. If it is, you are routed to a challenge screen before your session is created. You can complete the challenge with any method you have set up:
+
+- **Authenticator app** — Enter the six-digit code shown by Google Authenticator, Authy, 1Password, or any other TOTP app.
+- **Email code** — Request a one-time code sent to the email address on your account. Codes expire after 5 minutes.
+- **Passkey** — Use the biometrics or hardware key you registered on your device.
+- **Recovery code** — Use one of the single-use codes you saved when you set up your authenticator app.
+
+Email codes are always available as a fallback, even if you have not configured another method. This means you can still sign in if you reinstall your authenticator app or replace your phone, as long as you can read your email.
+
+<Note>
+  Each recovery code works only once. After you use one, save the remaining codes somewhere safe and generate a new set when you are running low.
+</Note>
+
+## Enable two-factor authentication
+
+New accounts have 2FA enabled by default, but you still need to register at least one verification method before the challenge becomes useful.
+
+<Steps>
+  <Step title="Open security settings">
+    Click your avatar in the top-right corner and select **Settings → Security**.
+  </Step>
+  <Step title="Choose a method">
+    Under **Two-factor authentication**, pick **Authenticator app** for the strongest protection or **Passkey** for the fastest sign-in.
+  </Step>
+  <Step title="Complete setup">
+    Scan the QR code with your authenticator app and enter the six-digit code to confirm, or follow your browser's prompts to register a passkey.
+  </Step>
+  <Step title="Save your recovery codes">
+    KoAkademy displays a list of recovery codes after authenticator setup. Store them in a password manager or print them — you will need them if you lose access to your app.
+  </Step>
+</Steps>
+
+## Disable two-factor authentication
+
+If you need to remove the second step at sign-in (for example, while troubleshooting access on a shared kiosk), you can turn the challenge off without removing the credentials you have already configured.
+
+<Steps>
+  <Step title="Go to Settings → Security">
+    Open the same panel where you enabled 2FA.
+  </Step>
+  <Step title="Toggle two-factor authentication off">
+    Switch **Require two-factor authentication at sign-in** to off. KoAkademy keeps your authenticator secret, recovery codes, and passkeys on file so you can re-enable the challenge later without setting them up again.
+  </Step>
+</Steps>
+
+<Warning>
+  Disabling 2FA reduces your account security to your password alone. Re-enable it as soon as you no longer need the exception.
+</Warning>
+
+## Recover access if you lose your method
+
+If you cannot complete the challenge, try these options in order:
+
+1. **Use a recovery code** on the challenge screen by selecting **Use a recovery code**.
+2. **Send an email code** to the address on file by clicking **Email me a code**.
+3. **Sign in with a passkey** if you registered one on another device.
+
+If none of these work, contact your school's IT administrator. Administrators can disable 2FA on your behalf so you can sign in and reconfigure it.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Is 2FA required for every login?">
+    Only when **Require two-factor authentication at sign-in** is on. New accounts have it on by default, but you can switch it off in **Settings → Security**.
+  </Accordion>
+  <Accordion title="What happens if I disable 2FA and turn it back on later?">
+    Your existing authenticator secret, recovery codes, and passkeys remain on file. You can re-enable the challenge without re-scanning a QR code or registering new keys.
+  </Accordion>
+  <Accordion title="Can I use email codes without setting up an authenticator app?">
+    Yes. Email codes are always available as a fallback while 2FA is enabled, even if you have not configured an authenticator app or passkey.
+  </Accordion>
+</AccordionGroup>
