@@ -1,0 +1,117 @@
+---
+title: "Self-host KoAkademy with Docker"
+description: "Run KoAkademy on your own infrastructure in minutes using the official Docker image, SQLite, and Redis with a single Compose file."
+---
+
+This guide walks you through running KoAkademy on your own server with the smallest practical stack — the official Docker image, SQLite for the database, and Redis for queues. Use it for evaluation, internal pilots, or as a starting point before you scale to a production database.
+
+## Before you begin
+
+Make sure your host has:
+
+- **Docker** 20.10 or newer
+- **Docker Compose** v2 (the `docker compose` plugin)
+- **OpenSSL** (used to generate the application key)
+- A free TCP port — `8000` by default
+
+<Note>
+  KoAkademy ships with sensible defaults: SQLite for the database, database-backed cache and sessions, log mail, and collection search. You only need Redis because the production image runs Horizon to process queued jobs.
+</Note>
+
+## Run KoAkademy with one command
+
+Copy and paste the following block into a terminal on your host. It creates a working directory, generates an application key, writes a `.env` file, defines a Compose stack, and starts the app.
+
+```sh
+mkdir -p koakademy && cd koakademy
+mkdir -p database
+touch database/database.sqlite
+APP_KEY="base64:$(openssl rand -base64 32)"
+cat > .env <<EOF
+APP_NAME="KoAkademy"
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=http://localhost:8000
+APP_KEY=${APP_KEY}
+PORTAL_HOST=localhost
+ADMIN_HOST=localhost
+REDIS_HOST=redis
+QUEUE_CONNECTION=redis
+EOF
+cat > compose.yaml <<'EOF'
+services:
+  app:
+    image: docker.io/yukazakiri/koakademy:latest
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "8000:8000"
+    volumes:
+      - koakademy-storage:/app/storage
+      - ./database/database.sqlite:/app/database/database.sqlite
+    depends_on:
+      redis:
+        condition: service_started
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    volumes:
+      - koakademy-redis:/data
+
+volumes:
+  koakademy-storage:
+  koakademy-redis:
+EOF
+docker compose up -d
+docker compose logs --tail=100 app
+```
+
+The image runs database migrations automatically on first boot. When the logs settle, open `http://localhost:8000` in your browser.
+
+## Create your first admin user
+
+Once the app is running, create an administrator account so you can sign in to the admin panel:
+
+```sh
+docker compose exec app php artisan make:filament-user
+```
+
+The command prompts for a name, email, and password. After it finishes, sign in at `http://localhost:8000/admin`.
+
+## What you just deployed
+
+| URL                              | Purpose                                                   |
+| -------------------------------- | --------------------------------------------------------- |
+| `http://localhost:8000`          | Student portal landing page                               |
+| `http://localhost:8000/admin`    | Filament admin panel for administrators                   |
+| `http://localhost:8000/administrators` | Administrator sign-in route                         |
+
+The stack uses two persistent volumes:
+
+- `koakademy-storage` — uploads, generated PDFs, and application logs
+- `koakademy-redis` — Redis append-only log for queues
+
+The SQLite database file is bind-mounted from `./database/database.sqlite` so you can back it up by copying the file.
+
+## Update to a new release
+
+Pull the latest image and restart the app container:
+
+```sh
+docker compose pull app
+docker compose up -d
+```
+
+Migrations run automatically on the next boot. Always back up the SQLite file and the `koakademy-storage` volume before you upgrade.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Production deployment" icon="server" href="/self-hosting/deployment">
+    Configure HTTPS, switch to PostgreSQL, add Meilisearch and SMTP, and harden the stack for production.
+  </Card>
+  <Card title="Local development" icon="code" href="/self-hosting/development">
+    Run KoAkademy from source with the official setup scripts for Linux and Windows.
+  </Card>
+</CardGroup>

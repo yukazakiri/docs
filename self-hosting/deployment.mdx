@@ -1,0 +1,157 @@
+---
+title: "Deploy KoAkademy in production"
+description: "Configure Docker images, environment variables, persistent storage, and production add-ons for a robust self-hosted KoAkademy deployment."
+---
+
+This page covers the choices you make when promoting KoAkademy from a quick-start install to a real production deployment. Start with the [Docker quick-start](/self-hosting/quick-start) and add only the services you actually need.
+
+## Choose an image
+
+The Docker image is published to multiple registries. Pin to a specific channel based on how stable you need your deployment to be.
+
+| Image                                       | Channel              | When to use                                                                 |
+| ------------------------------------------- | -------------------- | --------------------------------------------------------------------------- |
+| `docker.io/yukazakiri/koakademy:latest`     | Stable release       | Production deployments. Updated when a new tagged release is published.     |
+| `docker.io/yukazakiri/koakademy:dev-latest` | Rolling development  | Previewing in-progress changes. Expect breaking changes between updates.    |
+| `ghcr.io/yukazakiri/koakademy:latest`       | GHCR mirror          | Use if you prefer GitHub Container Registry or block Docker Hub.            |
+
+To switch your stack to the rolling development channel, change the app image:
+
+```yaml
+services:
+  app:
+    image: docker.io/yukazakiri/koakademy:dev-latest
+```
+
+<Warning>
+  The `dev-latest` tag tracks the development branch and may include unfinished features or migrations that have not been validated for production.
+</Warning>
+
+## Minimal Docker Compose
+
+This Compose file mirrors the quick-start. Use it as a baseline for a single-host production deployment behind your own reverse proxy.
+
+```yaml
+services:
+  app:
+    image: docker.io/yukazakiri/koakademy:latest
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "8000:8000"
+    volumes:
+      - koakademy-storage:/app/storage
+      - ./database/database.sqlite:/app/database/database.sqlite
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    volumes:
+      - koakademy-redis:/data
+
+volumes:
+  koakademy-storage:
+  koakademy-redis:
+```
+
+## Plain `docker run` deployment
+
+If you do not use Docker Compose, you can run the same stack with two `docker run` commands on a shared user-defined network.
+
+```sh
+mkdir -p koakademy/database
+touch koakademy/database/database.sqlite
+docker network create koakademy 2>/dev/null || true
+docker run -d --name koakademy-redis --restart unless-stopped --network koakademy redis:7-alpine
+docker run -d \
+  --name koakademy \
+  --restart unless-stopped \
+  --network koakademy \
+  -p 8000:8000 \
+  -v koakademy-storage:/app/storage \
+  -v "$(pwd)/koakademy/database/database.sqlite:/app/database/database.sqlite" \
+  -e APP_NAME="KoAkademy" \
+  -e APP_ENV=production \
+  -e APP_DEBUG=false \
+  -e APP_URL=http://localhost:8000 \
+  -e APP_KEY=base64:replace-with-generated-key \
+  -e PORTAL_HOST=localhost \
+  -e ADMIN_HOST=localhost \
+  -e REDIS_HOST=koakademy-redis \
+  -e QUEUE_CONNECTION=redis \
+  docker.io/yukazakiri/koakademy:latest
+```
+
+Generate a fresh application key with:
+
+```sh
+printf 'base64:%s\n' "$(openssl rand -base64 32)"
+```
+
+## Required environment variables
+
+The minimal Docker setup needs only a handful of values in your `.env`:
+
+| Variable             | Description                                                                                          |
+| -------------------- | ---------------------------------------------------------------------------------------------------- |
+| `APP_KEY`            | Required encryption key. Generate with `openssl rand -base64 32` and prefix with `base64:`.          |
+| `APP_NAME`           | Display name shown in browser tabs and emails. Defaults to `KoAkademy`.                              |
+| `APP_URL`            | Public URL used to build links in emails, redirects, and PDFs.                                       |
+| `PORTAL_HOST`        | Hostname that serves the student portal. Use `localhost` for local testing.                          |
+| `ADMIN_HOST`         | Hostname that serves the admin panel. Use `localhost` for local testing.                             |
+| `REDIS_HOST`         | Redis hostname. The supervised Horizon worker requires Redis to process jobs.                        |
+| `QUEUE_CONNECTION`   | Set to `redis` so queued jobs run through Horizon.                                                   |
+
+<Tip>
+  The image runs migrations on every boot by default (`RUN_MIGRATIONS=true`) and listens on port `8000`. Set `RUN_MIGRATIONS=false` if you need to gate migrations behind your own deploy step.
+</Tip>
+
+## Production add-ons
+
+Add the following services as your deployment grows. Each one is optional — KoAkademy works without them — but each addresses a real production need.
+
+<AccordionGroup>
+  <Accordion title="HTTPS reverse proxy">
+    Place Caddy, Traefik, Nginx, Cloudflare Tunnel, or your platform's managed proxy in front of port `8000`. Terminate TLS at the proxy and forward plain HTTP to the app container. Update `APP_URL`, `PORTAL_HOST`, and `ADMIN_HOST` to the public hostnames.
+  </Accordion>
+  <Accordion title="PostgreSQL database">
+    Move from SQLite to PostgreSQL when you need stronger concurrency, replication, or remote backups. Provision a Postgres server, create a database, and set the standard `DB_*` variables in your `.env`. Run migrations once after switching:
+
+    ```sh
+    docker compose exec app php artisan migrate --force
+    ```
+  </Accordion>
+  <Accordion title="Meilisearch">
+    KoAkademy uses Laravel Scout's collection driver by default, which scans Eloquent collections in PHP. For faster, indexed search across larger datasets, run a Meilisearch container and point Scout at it via `SCOUT_DRIVER=meilisearch` and the related `MEILISEARCH_*` variables.
+  </Accordion>
+  <Accordion title="SMTP for outbound email">
+    The image defaults to the `log` mail transport so emails are written to the application log. For password resets, enrollment notifications, and announcements to actually reach users, configure your own SMTP credentials with the standard `MAIL_*` variables.
+  </Accordion>
+  <Accordion title="S3 or Cloudflare R2 storage">
+    The default filesystem driver writes uploads to the `koakademy-storage` volume. If you run more than one app node, replace hosts often, or want offsite backups, switch to S3-compatible storage by setting `FILESYSTEM_DISK=s3` and the standard `AWS_*` variables.
+  </Accordion>
+</AccordionGroup>
+
+## Persistence checklist
+
+Always keep these paths persistent across container restarts and redeploys:
+
+- `/app/storage` — uploads, generated PDFs, and Laravel logs
+- `/app/database/database.sqlite` — required only when you use SQLite
+- Your Redis data volume — required for in-flight queued jobs
+- Your PostgreSQL data directory — required when you switch to Postgres
+
+<Note>
+  Snapshots of the storage volume and database are the minimum viable backup strategy. Test restores periodically.
+</Note>
+
+## Update to a new release
+
+```sh
+docker compose pull app
+docker compose up -d
+```
+
+The container runs migrations on boot. For zero-downtime upgrades, run migrations once against a maintenance instance before promoting traffic.

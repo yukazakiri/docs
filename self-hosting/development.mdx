@@ -1,0 +1,140 @@
+---
+title: "Set up KoAkademy for local development"
+description: "Use the official setup scripts to run KoAkademy from source on Linux with Docker Compose or on Windows with Laravel Herd."
+---
+
+This guide walks you through running KoAkademy from source so you can contribute features, debug issues, or test customizations. The repository ships with setup scripts that handle environment files, dependencies, local domains, and HTTPS certificates for you.
+
+## Before you begin
+
+You need:
+
+- **Git** to clone the repository
+- A working **Docker** installation (Linux) or **[Laravel Herd](https://herd.laravel.com/)** (Windows)
+- **Bash** (Linux/macOS) or **PowerShell 5.1+** (Windows)
+
+The setup scripts live in the repository at `scripts/dev-setup.sh` and `scripts/dev-setup.ps1`.
+
+## Linux setup
+
+The Linux script provisions the Docker Compose development stack, generates local HTTPS certificates, and writes `.test` hosts entries.
+
+<Steps>
+  <Step title="Clone the repository">
+    ```sh
+    git clone https://github.com/yukazakiri/koakademy.git
+    cd koakademy
+    ```
+  </Step>
+  <Step title="Run the setup script">
+    ```sh
+    ./scripts/dev-setup.sh
+    ```
+
+    The script copies `.env.example`, installs Composer and npm dependencies, brings up the Sail containers, generates an app key, runs migrations, and configures `portal.koakademy.test` and `admin.koakademy.test`.
+  </Step>
+  <Step title="Open the portals">
+    Once the script finishes, open:
+
+    - `https://portal.koakademy.test` — student portal
+    - `https://admin.koakademy.test` — admin panel
+    - `http://mailpit.local.test:8025` — captured outbound email
+  </Step>
+</Steps>
+
+### Useful flags
+
+Pass any of the following flags to skip steps you do not need:
+
+| Flag             | Effect                                                                |
+| ---------------- | --------------------------------------------------------------------- |
+| `--fresh`        | Tear down existing containers and reset databases before starting.    |
+| `--skip-ssl`     | Do not generate or trust local HTTPS certificates.                    |
+| `--skip-hosts`   | Do not modify your `/etc/hosts` file with `.test` domain entries.     |
+| `--skip-docker`  | Skip the Docker Compose bring-up step (use if you manage it yourself).|
+
+```sh
+./scripts/dev-setup.sh --fresh
+./scripts/dev-setup.sh --skip-ssl
+./scripts/dev-setup.sh --skip-hosts
+./scripts/dev-setup.sh --skip-docker
+```
+
+## Windows setup with Laravel Herd
+
+The PowerShell script targets developers using [Laravel Herd](https://herd.laravel.com/) for native PHP, MySQL, and HTTPS on Windows. Install Herd first, then run the script.
+
+<Steps>
+  <Step title="Clone the repository">
+    ```powershell
+    git clone https://github.com/yukazakiri/koakademy.git
+    cd koakademy
+    ```
+  </Step>
+  <Step title="Run the PowerShell script">
+    ```powershell
+    .\scripts\dev-setup.ps1
+    ```
+
+    The script registers the project with Herd, configures the local `.test` domains and HTTPS, installs dependencies, and runs migrations.
+  </Step>
+</Steps>
+
+### Useful flags
+
+| Flag                | Effect                                                          |
+| ------------------- | --------------------------------------------------------------- |
+| `-SkipMigrations`   | Skip running database migrations during setup.                  |
+| `-SkipNpm`          | Skip the `npm install` step.                                    |
+| `-SkipHosts`        | Do not modify the Windows `hosts` file.                         |
+
+```powershell
+.\scripts\dev-setup.ps1 -SkipMigrations
+.\scripts\dev-setup.ps1 -SkipNpm
+.\scripts\dev-setup.ps1 -SkipHosts
+```
+
+## Common development commands
+
+Once the environment is running, you will use these commands frequently. If you are using Sail or Docker Compose for development, prefix the PHP and Node commands with `vendor/bin/sail`.
+
+```sh
+php artisan migrate
+php artisan test --compact
+vendor/bin/pint --dirty --format agent
+npm run dev
+npm run build
+```
+
+| Command                                  | What it does                                                  |
+| ---------------------------------------- | ------------------------------------------------------------- |
+| `php artisan migrate`                    | Apply pending database migrations.                            |
+| `php artisan test --compact`             | Run the Pest test suite with compact output.                  |
+| `vendor/bin/pint --dirty --format agent` | Format only modified files using the Laravel Pint code style. |
+| `npm run dev`                            | Start the Vite dev server with hot module reload.             |
+| `npm run build`                          | Produce the production frontend bundle.                       |
+
+<Tip>
+  Run `php artisan test --compact` before opening a pull request. Most contributions also require running `vendor/bin/pint --dirty --format agent` to keep the codebase consistent.
+</Tip>
+
+## Local development URLs
+
+The default `.env` values use these hostnames:
+
+- `https://portal.koakademy.test` — student portal
+- `https://admin.koakademy.test` — admin panel
+- `http://mailpit.local.test:8025` — Mailpit web UI for captured email
+
+If you change `PORTAL_HOST` or `ADMIN_HOST` in your `.env`, re-run the setup script with `--skip-docker` (Linux) to refresh hosts and certificates.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Self-host with Docker" icon="docker" href="/self-hosting/quick-start">
+    Spin up a production-style stack with the official image and Compose.
+  </Card>
+  <Card title="API reference" icon="code" href="/api/overview">
+    Browse the REST API endpoints exposed by KoAkademy.
+  </Card>
+</CardGroup>
