@@ -101,12 +101,145 @@ The minimal Docker setup needs only a handful of values in your `.env`:
 | `APP_URL`            | Public URL used to build links in emails, redirects, and PDFs.                                       |
 | `PORTAL_HOST`        | Hostname that serves the student portal. Use `localhost` for local testing.                          |
 | `ADMIN_HOST`         | Hostname that serves the admin panel. Use `localhost` for local testing.                             |
-| `REDIS_HOST`         | Redis hostname. The supervised Horizon worker requires Redis to process jobs.                        |
-| `QUEUE_CONNECTION`   | Set to `redis` so queued jobs run through Horizon.                                                   |
+| `REDIS_HOST`         | Redis hostname. Required only when a Redis-backed driver is enabled (queue, cache, session, or Pulse). |
+| `QUEUE_CONNECTION`   | Queue driver. Defaults to `database`. Set to `redis` to run queued jobs through Horizon.             |
+| `HORIZON_ENABLED`    | Optional. Force-enable or disable the supervised Horizon worker. See [Horizon and queue drivers](#horizon-and-queue-drivers). |
 
 <Tip>
   The image runs migrations on every boot by default (`RUN_MIGRATIONS=true`) and listens on port `8000`. Set `RUN_MIGRATIONS=false` if you need to gate migrations behind your own deploy step.
 </Tip>
+
+## Database options
+
+KoAkademy supports SQLite, PostgreSQL, and MySQL or MariaDB. SQLite is the default and works for evaluation, single-host installs, and small teams. Switch to PostgreSQL for production deployments that need stronger concurrency, replication, or remote backups.
+
+<Tabs>
+  <Tab title="SQLite (default)">
+    SQLite is the fastest way to get running and requires no extra services. Mount a writable database file into the container:
+
+    ```env
+    DB_CONNECTION=sqlite
+    ```
+
+    ```yaml
+    services:
+      app:
+        volumes:
+          - ./database/database.sqlite:/app/database/database.sqlite
+    ```
+  </Tab>
+  <Tab title="PostgreSQL (recommended)">
+    Use PostgreSQL when you need stronger concurrency, replication, or remote backups.
+
+    ```env
+    DB_CONNECTION=pgsql
+    DB_HOST=pgsql
+    DB_PORT=5432
+    DB_DATABASE=koakademy
+    DB_USERNAME=koakademy
+    DB_PASSWORD=replace-with-strong-password
+    ```
+
+    ```yaml
+    services:
+      pgsql:
+        image: postgres:17-alpine
+        restart: unless-stopped
+        environment:
+          POSTGRES_DB: koakademy
+          POSTGRES_USER: koakademy
+          POSTGRES_PASSWORD: replace-with-strong-password
+        volumes:
+          - koakademy-pgsql:/var/lib/postgresql/data
+
+    volumes:
+      koakademy-pgsql:
+    ```
+
+    Run migrations once after switching from SQLite:
+
+    ```sh
+    docker compose exec app php artisan migrate --force
+    ```
+  </Tab>
+  <Tab title="MySQL or MariaDB">
+    Use MySQL or MariaDB if you already operate one in your stack.
+
+    ```env
+    DB_CONNECTION=mysql
+    DB_HOST=mysql
+    DB_PORT=3306
+    DB_DATABASE=koakademy
+    DB_USERNAME=koakademy
+    DB_PASSWORD=replace-with-strong-password
+    ```
+
+    ```yaml
+    services:
+      mysql:
+        image: mysql:8.4
+        restart: unless-stopped
+        environment:
+          MYSQL_DATABASE: koakademy
+          MYSQL_USER: koakademy
+          MYSQL_PASSWORD: replace-with-strong-password
+          MYSQL_ROOT_PASSWORD: replace-with-strong-root-password
+        volumes:
+          - koakademy-mysql:/var/lib/mysql
+
+    volumes:
+      koakademy-mysql:
+    ```
+  </Tab>
+</Tabs>
+
+## Horizon and queue drivers
+
+The KoAkademy image bundles Laravel Horizon for queue processing. Horizon needs Redis, but you can run KoAkademy without Redis when you do not need a Redis-backed queue, cache, session, or Pulse driver.
+
+The container resolves whether to run Horizon at boot using these rules:
+
+- If `QUEUE_CONNECTION=redis`, Horizon is enabled automatically.
+- If `HORIZON_ENABLED=true`, Horizon is enabled even when the queue driver is not Redis.
+- If `HORIZON_ENABLED=false`, Horizon is disabled even when other Redis-backed drivers are in use.
+- Otherwise, Horizon is disabled and the app uses the configured queue driver directly.
+
+When Horizon is disabled, the HTTP container starts without the Horizon supervisor, the `horizon:snapshot` scheduled command stops running, and a dedicated `CONTAINER_MODE=horizon` worker exits cleanly without crashing.
+
+<Note>
+  The Redis health check at boot is skipped when no Redis-backed services are configured. This lets you run KoAkademy with a database-only setup (no Redis container required).
+</Note>
+
+<Tabs>
+  <Tab title="Database queue (no Redis)">
+    Run KoAkademy without Redis by using the database queue driver. Suitable for small installs and evaluation.
+
+    ```env
+    QUEUE_CONNECTION=database
+    CACHE_STORE=database
+    SESSION_DRIVER=database
+    ```
+
+    You can drop the Redis service from your Compose file entirely.
+  </Tab>
+  <Tab title="Redis queue with Horizon">
+    Recommended for production. Horizon runs automatically when `QUEUE_CONNECTION=redis`.
+
+    ```env
+    QUEUE_CONNECTION=redis
+    REDIS_HOST=redis
+    ```
+  </Tab>
+  <Tab title="Force Horizon on or off">
+    Use `HORIZON_ENABLED` to override the default behavior — for example, to keep Horizon running while you migrate the queue driver, or to disable Horizon during a maintenance window.
+
+    ```env
+    HORIZON_ENABLED=true
+    # or
+    HORIZON_ENABLED=false
+    ```
+  </Tab>
+</Tabs>
 
 ## Production add-ons
 
