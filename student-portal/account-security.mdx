@@ -3,20 +3,24 @@ title: "Account security and two-factor authentication"
 description: "Protect your KoAkademy account with two-factor authentication. Learn how to enable 2FA, choose a verification method, and turn the challenge off when needed."
 ---
 
-KoAkademy adds a second verification step at sign-in to keep your account safe even if your password is compromised. Two-factor authentication (2FA) is on by default for every account, and you can choose how you complete the challenge — an authenticator app, an emailed code, a passkey, or a recovery code.
+KoAkademy adds a second verification step at sign-in to keep your account safe even if your password is compromised. Two-factor authentication (2FA) is on by default, and you can choose how you complete the challenge — an authenticator app, an emailed code, a passkey, or a recovery code.
 
 This page explains how the 2FA challenge works, how to enable or disable it, and what to do if you lose access to your verification method.
 
 ## How the challenge works
 
-After you submit a correct password, KoAkademy checks whether 2FA is enabled on your account. If it is, you are routed to a challenge screen before your session is created. You can complete the challenge with any method you have set up:
+After you submit a correct password, KoAkademy checks whether 2FA is enabled on your account and at least one verification method is configured. If both are true, you are routed to a challenge screen before your session is created. You can complete the challenge with any method you have set up:
 
 - **Authenticator app** — Enter the six-digit code shown by Google Authenticator, Authy, 1Password, or any other TOTP app.
-- **Email code** — Request a one-time code sent to the email address on your account. Codes expire after 5 minutes.
+- **Email code** — Request a one-time code sent to the email address on your account. Codes expire after 5 minutes. You must enable email codes from your security settings before this option appears on the challenge screen.
 - **Passkey** — Use the biometrics or hardware key you registered on your device.
 - **Recovery code** — Use one of the single-use codes you saved when you set up your authenticator app.
 
-Email codes are always available as a fallback, even if you have not configured another method. This means you can still sign in if you reinstall your authenticator app or replace your phone, as long as you can read your email.
+The challenge screen only shows the methods you have enabled. If you have not configured any verification method, KoAkademy signs you in with your password alone — set up at least one method to make 2FA effective.
+
+<Note>
+  The same 2FA toggle applies to both the student or faculty portal and the admin panel. Turning 2FA off in **Settings → Security** disables the challenge for every place you sign in to KoAkademy.
+</Note>
 
 <Note>
   Each recovery code works only once. After you use one, save the remaining codes somewhere safe and generate a new set when you are running low.
@@ -31,7 +35,7 @@ New accounts have 2FA enabled by default, but you still need to register at leas
     Click your avatar in the top-right corner and select **Settings → Security**.
   </Step>
   <Step title="Choose a method">
-    Under **Two-factor authentication**, pick **Authenticator app** for the strongest protection or **Passkey** for the fastest sign-in.
+    Under **Two-factor authentication**, pick **Authenticator app** for the strongest protection or **Passkey** for the fastest sign-in. You can also turn on **Email code** to use one-time codes sent to your inbox as an alternative or fallback method.
   </Step>
   <Step title="Complete setup">
     Scan the QR code with your authenticator app and enter the six-digit code to confirm, or follow your browser's prompts to register a passkey.
@@ -40,6 +44,10 @@ New accounts have 2FA enabled by default, but you still need to register at leas
     KoAkademy displays a list of recovery codes after authenticator setup. Store them in a password manager or print them — you will need them if you lose access to your app.
   </Step>
 </Steps>
+
+<Tip>
+  Enable email codes in addition to your authenticator app or passkey. Email gives you a way back in if you lose your phone or hardware key.
+</Tip>
 
 ## Disable two-factor authentication
 
@@ -63,8 +71,10 @@ If you need to remove the second step at sign-in (for example, while troubleshoo
 If you cannot complete the challenge, try these options in order:
 
 1. **Use a recovery code** on the challenge screen by selecting **Use a recovery code**.
-2. **Send an email code** to the address on file by clicking **Email me a code**.
+2. **Send an email code** to the address on file by clicking **Email me a code** — this option appears only if you turned on email authentication in your security settings.
 3. **Sign in with a passkey** if you registered one on another device.
+
+If you request email codes too quickly in succession, KoAkademy throttles the requests and asks you to wait a moment before trying again. Check your inbox (and spam folder) for the previous code before requesting another one.
 
 If none of these work, contact your school's IT administrator. Administrators can disable 2FA on your behalf so you can sign in and reconfigure it.
 
@@ -78,6 +88,9 @@ If none of these work, contact your school's IT administrator. Administrators ca
     Your existing authenticator secret, recovery codes, and passkeys remain on file. You can re-enable the challenge without re-scanning a QR code or registering new keys.
   </Accordion>
   <Accordion title="Can I use email codes without setting up an authenticator app?">
-    Yes. Email codes are always available as a fallback while 2FA is enabled, even if you have not configured an authenticator app or passkey.
+    Yes, but you have to enable email authentication in **Settings → Security** first. Once it is on, you can use emailed codes on their own or as a fallback alongside an authenticator app or passkey.
+  </Accordion>
+  <Accordion title="Does the 2FA toggle apply to the admin panel too?">
+    Yes. The **Require two-factor authentication at sign-in** toggle controls the challenge for every KoAkademy sign-in, including the admin panel for staff and faculty accounts.
   </Accordion>
 </AccordionGroup>
