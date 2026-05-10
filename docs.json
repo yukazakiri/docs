@@ -32,7 +32,8 @@
               "student-portal/enrollment",
               "student-portal/academics",
               "student-portal/finances",
-              "student-portal/digital-id"
+              "student-portal/digital-id",
+              "student-portal/account-security"
             ]
           },
           {
