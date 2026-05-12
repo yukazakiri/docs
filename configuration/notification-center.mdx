@@ -1,0 +1,101 @@
+---
+title: "Send templated notifications from the Notification Center"
+description: "Use the Notification Center to broadcast email, in-app, and real-time messages to students and faculty with reusable templates for enrollment, grades, and more."
+---
+
+The Notification Center module lets administrators send rich notifications to selected audiences using pre-built templates. Pick a template, fill in the variables, choose delivery channels, and dispatch the message — the system queues delivery in the background.
+
+## When to use this module
+
+Enable Notification Center when you need to send recurring, formatted notifications such as grade releases, payment notices, holiday announcements, or class suspensions. The bundled templates handle the layout so staff only fill in the variable parts.
+
+## Built-in templates
+
+The module ships with ready-to-use templates grouped by category:
+
+| Template | Use for |
+| --- | --- |
+| Academic schedule | Class times, room changes, and term calendars |
+| Announcement | General institution-wide notices |
+| Class suspension | Cancelled or rescheduled classes |
+| Enrollment | Enrollment window reminders and confirmations |
+| Grade release | Notifying students that grades are available |
+| Holiday | Holiday closures and observances |
+| Official | Formal communications from administration |
+| Payment notice | Tuition due dates and outstanding balances |
+| Reminder | Generic reminders for upcoming deadlines |
+| School event | Campus events, ceremonies, and activities |
+| Success | Positive confirmations and milestones |
+| Warning | Cautionary notices and policy reminders |
+
+## Delivery channels
+
+Pick one or more channels when you send a notification:
+
+- **Email (`mail`)** — Sends a styled email using the template's HTML.
+- **In-app (`database`)** — Adds the notification to the recipient's bell-icon inbox.
+- **Real-time (`broadcast`)** — Pushes the notification to open browser sessions immediately.
+
+You must select at least one channel.
+
+## Send a notification
+
+<Steps>
+  <Step title="Open the Notification Center">
+    In the admin panel, go to **Notification Center**.
+  </Step>
+  <Step title="Pick a template">
+    Browse templates by category and select the one that fits your message.
+  </Step>
+  <Step title="Choose the audience">
+    Select the target audience — by role (students, faculty, admins), by school, or by a specific list.
+  </Step>
+  <Step title="Fill in the template variables">
+    Enter the title, content, and any template-specific fields (for example, payment due date or class section).
+  </Step>
+  <Step title="Pick channels and send">
+    Choose **Email**, **In-app**, **Real-time**, or a combination, then submit. Delivery is queued and runs in the background.
+  </Step>
+</Steps>
+
+## Preview before sending
+
+Each template supports a live preview. Click **Preview** to render the email with sample data before you commit to sending. Use this to catch formatting issues or missing variables.
+
+## Add a call-to-action button
+
+Notifications can include up to several action buttons. For each action, set:
+
+- **Label** — Up to 50 characters of button text.
+- **URL** — The destination link (full URL).
+- **Color** — One of `primary`, `secondary`, `success`, `danger`, `warning`, `info`, or `gray`.
+- **Open in new tab** — Whether the link opens in a new browser tab.
+
+Example values for a payment reminder:
+
+| Field | Value |
+| --- | --- |
+| Label | View statement |
+| URL | `https://portal.example.edu/student/tuition` |
+| Color | `primary` |
+| Open in new tab | No |
+
+## Notification types
+
+The optional **type** field controls the visual styling and icon of the message:
+
+- `info` — neutral information (default)
+- `success` — positive confirmations
+- `warning` — caution or attention required
+- `danger` / `error` — critical issues
+
+## Related pages
+
+<CardGroup cols={2}>
+  <Card title="Announcements" icon="bullhorn" href="/configuration/announcements">
+    Use announcements for persistent banners shown across the portal.
+  </Card>
+  <Card title="Feature modules" icon="puzzle-piece" href="/configuration/modules">
+    Enable or disable the Notification Center module for your installation.
+  </Card>
+</CardGroup>

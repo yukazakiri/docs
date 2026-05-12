@@ -1,0 +1,88 @@
+---
+title: "Manage books, authors, and borrow records in the Library"
+description: "Use the Library System module to catalog books and research papers, group them by category and author, and track who has borrowed each title from the admin panel."
+---
+
+The Library System module turns KoAkademy into a lightweight integrated library catalog. Administrators can register books and research papers, organize them with categories and authors, and track every borrow and return from one place.
+
+## When to use this module
+
+Enable Library System if your institution runs a campus library, a department reading room, or any collection where you need to know which titles you own and who currently has them.
+
+## What you can do
+
+- Maintain a **Books** catalog with cover image, ISBN, edition, and stock counts.
+- Maintain an **Authors** directory and link each book to its authors.
+- Organize the catalog with **Categories** for easy browsing and reporting.
+- Record **Borrow records** that tie a book to a borrower, with due dates and return status.
+- Track **Research papers** with file uploads and associated students.
+
+## Catalog structure
+
+| Resource | Purpose |
+| --- | --- |
+| Books | Each title in your collection, with stock and metadata |
+| Authors | People credited with writing books and research papers |
+| Categories | Subject groupings used to filter and browse the catalog |
+| Borrow records | Active and historical loans, including due dates |
+| Research papers | Student-authored or institutional papers with attachments |
+
+## Enable Library System
+
+<Steps>
+  <Step title="Open the admin panel">
+    Sign in as an administrator and go to **Modules**.
+  </Step>
+  <Step title="Activate the module">
+    Toggle **Library System** on. The change applies immediately.
+  </Step>
+  <Step title="Set up your taxonomy">
+    Visit **Library → Authors** and **Library → Categories** to create the entities you will reference when adding books.
+  </Step>
+</Steps>
+
+## Add a book
+
+<Steps>
+  <Step title="Open the books list">
+    Go to **Library → Books** and select **New book**.
+  </Step>
+  <Step title="Fill in the catalog fields">
+    Enter the title, ISBN, edition, publisher, and stock count. Upload a cover image if available.
+  </Step>
+  <Step title="Assign authors and category">
+    Pick one or more authors from the directory and choose a category.
+  </Step>
+  <Step title="Save">
+    The book is now searchable in the catalog and available for borrow records.
+  </Step>
+</Steps>
+
+## Record a borrow
+
+<Steps>
+  <Step title="Open Borrow records">
+    Go to **Library → Borrow records** and select **New borrow record**.
+  </Step>
+  <Step title="Pick the book and borrower">
+    Choose the book, the borrower, and the due date.
+  </Step>
+  <Step title="Mark as returned">
+    When the book is returned, open the record and set its status to **Returned**.
+  </Step>
+</Steps>
+
+## Manage research papers
+
+Research papers behave like books with attached files. Use this for thesis archives, capstone projects, or institutional research. Each paper can list its authors, a category, and the students who contributed.
+
+## Related pages
+
+<CardGroup cols={2}>
+  <Card title="Feature modules" icon="puzzle-piece" href="/configuration/modules">
+    Enable or disable the Library System module for your installation.
+  </Card>
+  <Card title="Inventory" icon="boxes-stacked" href="/configuration/inventory">
+    Track non-book physical assets such as equipment and network gear.
+  </Card>
+</CardGroup>

@@ -1,0 +1,64 @@
+---
+title: "Run a cashier desk for student payments"
+description: "Use the Cashier module to record over-the-counter tuition payments, issue receipts, and reconcile transactions from a dedicated point-of-sale page."
+---
+
+The Cashier module adds a dedicated point-of-sale workspace to the admin panel for staff who collect tuition payments in person. Use it to look up a student, apply a payment to their statement of account, and produce a receipt without leaving the page.
+
+## When to use this module
+
+Enable Cashier if your institution has a window or counter where students pay tuition, miscellaneous fees, or other charges in cash, by check, or by card. If all payments flow through an external provider, you may not need this module.
+
+## What you can do
+
+- Search for a student by ID, name, or active enrollment.
+- View an itemized statement of account with outstanding balances.
+- Record a payment against one or more line items and choose the payment method.
+- Generate a printable receipt for the student.
+- Hand off completed transactions to the finance ledger for reconciliation.
+
+## Enable Cashier
+
+<Steps>
+  <Step title="Open the admin panel">
+    Sign in as an administrator and go to **Modules**.
+  </Step>
+  <Step title="Activate the module">
+    Toggle **Cashier** on. The change applies immediately.
+  </Step>
+  <Step title="Open the Cashier page">
+    In the admin navigation, select **Cashier** to load the point-of-sale workspace.
+  </Step>
+</Steps>
+
+## Record a payment
+
+<Steps>
+  <Step title="Find the student">
+    Use the search field to pull up the student by ID number, full name, or email. Their statement of account loads on the right.
+  </Step>
+  <Step title="Select the line items">
+    Check the fees or balances the student is paying for. The total updates as you select items.
+  </Step>
+  <Step title="Choose a payment method">
+    Pick **Cash**, **Check**, **Card**, or another configured method. Enter the amount tendered.
+  </Step>
+  <Step title="Confirm and print">
+    Submit the payment. A receipt is generated and the transaction appears in finance reports.
+  </Step>
+</Steps>
+
+## Permissions
+
+Cashier access is governed by your role configuration. Assign the cashier permission to staff who should record payments, and keep it separate from finance reconciliation roles for stronger audit trails.
+
+## Related pages
+
+<CardGroup cols={2}>
+  <Card title="Feature modules" icon="puzzle-piece" href="/configuration/modules">
+    Enable or disable the Cashier module for your installation.
+  </Card>
+  <Card title="Student finances" icon="wallet" href="/student-portal/finances">
+    See how students view their balance and payment history in the portal.
+  </Card>
+</CardGroup>

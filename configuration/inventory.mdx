@@ -1,0 +1,98 @@
+---
+title: "Track equipment and borrowings with the Inventory module"
+description: "Use the Inventory module to catalog tools and network gear, manage suppliers and categories, and track who has borrowed each item with status and history."
+---
+
+The Inventory module gives administrators a single place to catalog physical assets such as tools, routers, NVRs, and CCTV cameras, then track who is currently borrowing them. Every borrowing action is logged so you can audit movements over time.
+
+## When to use this module
+
+Enable Inventory if your school lends equipment to faculty or students, manages IT or network gear across rooms, or needs an auditable record of where each item is and who has it.
+
+## What you can do
+
+- Catalog items with a name, type, category, supplier, condition, and effective quantity.
+- Group items into **Categories** and link them to **Suppliers**.
+- Record borrowings and returns, tracking due dates and condition on return.
+- View a per-item history of moves, stock rebalances, and borrowing events.
+- File amendments when stock counts or item details need correcting.
+- Generate stock movement entries when items leave or re-enter the inventory.
+
+## Item types
+
+Items are classified using a fixed set of types:
+
+| Type | Use for |
+| --- | --- |
+| Tool | Hand tools, lab kits, general equipment |
+| Router | Network routers |
+| NVR | Network video recorders |
+| CCTV | Surveillance cameras |
+
+Router, NVR, and CCTV are grouped as **network** items and surface together in network-specific views.
+
+## Borrowing statuses
+
+Each borrowing record carries one of these statuses:
+
+- **Borrowed** — The item is currently checked out.
+- **Returned** — The item has been returned.
+- **Overdue** — The borrower passed the expected return date.
+- **Lost** — The item was reported missing.
+
+## Enable Inventory
+
+<Steps>
+  <Step title="Open the admin panel">
+    Sign in as an administrator and go to **Modules**.
+  </Step>
+  <Step title="Activate the module">
+    Toggle **Inventory** on. The change applies immediately.
+  </Step>
+  <Step title="Seed your taxonomy">
+    Open **Inventory → Categories** and **Inventory → Suppliers** to create the buckets you will assign items to.
+  </Step>
+</Steps>
+
+## Add an item
+
+<Steps>
+  <Step title="Open the items list">
+    Go to **Inventory → Items** and select **New item**.
+  </Step>
+  <Step title="Fill in the details">
+    Enter the name, type, category, supplier, quantity, and condition. Mark the item as consumable if it is used up rather than returned.
+  </Step>
+  <Step title="Save">
+    The item appears in the catalog. Its full history starts logging from creation.
+  </Step>
+</Steps>
+
+## Record a borrowing
+
+<Steps>
+  <Step title="Open Borrowings">
+    Go to **Inventory → Borrowings** and select **New borrowing**.
+  </Step>
+  <Step title="Pick item and borrower">
+    Choose the item, the borrower (student, faculty, or staff), the expected return date, and the condition at the time of release.
+  </Step>
+  <Step title="Mark as returned later">
+    When the item comes back, open the borrowing and update the status to **Returned**, recording the return condition.
+  </Step>
+</Steps>
+
+## Audit history
+
+The **Ledger** view shows every event tied to an item — creation, updates, location changes, stock rebalances, and borrowing actions. Use it to investigate discrepancies or build an audit trail for a specific asset.
+
+## Related pages
+
+<CardGroup cols={2}>
+  <Card title="Feature modules" icon="puzzle-piece" href="/configuration/modules">
+    Enable or disable the Inventory module for your installation.
+  </Card>
+  <Card title="Branding settings" icon="paintbrush" href="/configuration/branding">
+    Configure your school's name, logo, and visual identity.
+  </Card>
+</CardGroup>
