@@ -51,7 +51,13 @@
               "configuration/branding",
               "configuration/academic-settings",
               "configuration/enrollment-pipeline",
-              "configuration/modules"
+              "configuration/modules",
+              "configuration/announcements",
+              "configuration/cashier",
+              "configuration/inventory",
+              "configuration/library-system",
+              "configuration/notification-center",
+              "configuration/student-medical-records"
             ]
           },
           {

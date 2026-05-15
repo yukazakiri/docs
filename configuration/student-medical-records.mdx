@@ -1,0 +1,97 @@
+---
+title: "Keep clinic visits with Student Medical Records"
+description: "Use the Student Medical Records module to log clinic visits, capture diagnoses and vitals, schedule follow-ups, and protect confidential entries with role-based access."
+---
+
+The Student Medical Records module gives clinic staff a structured way to log every student visit, capture clinical details, and schedule follow-ups. Sensitive entries can be flagged confidential so only authorized staff can read them.
+
+## When to use this module
+
+Enable Student Medical Records if your institution operates a clinic or health office that needs to track student visits beyond what a generic notes field allows. It is especially useful for monitoring chronic conditions, vaccinations, allergies, and mental health support.
+
+## What you can record
+
+Each medical record captures:
+
+- **Record type** — Checkup, vaccination, allergy, medication, emergency, dental, vision, mental health, laboratory, surgery, or follow-up.
+- **Visit date** — When the encounter happened.
+- **Clinical notes** — Description, diagnosis, treatment, and prescription.
+- **Vitals** — Height, weight, temperature, and blood pressure.
+- **Status and priority** — Track open versus resolved cases and triage urgency.
+- **Follow-up date** — Optional date for the next planned visit.
+- **Confidentiality flag** — Restrict the record to authorized staff only.
+
+## Record types
+
+The type drives reporting buckets and dashboard color coding:
+
+| Type | Use for |
+| --- | --- |
+| General checkup | Routine wellness visits |
+| Vaccination | Immunization records |
+| Allergy | Allergy diagnoses and reactions |
+| Medication | Prescribed or administered medication |
+| Emergency | Urgent or acute incidents |
+| Dental | Dental visits |
+| Vision | Eye care visits |
+| Mental health | Counseling or psychological support |
+| Laboratory test | Lab work results |
+| Surgery | Surgical procedures |
+| Follow-up | Scheduled return visits |
+
+## Enable Student Medical Records
+
+<Steps>
+  <Step title="Open the admin panel">
+    Sign in as an administrator and go to **Modules**.
+  </Step>
+  <Step title="Activate the module">
+    Toggle **Student Medical Records** on. The change applies immediately.
+  </Step>
+  <Step title="Grant clinic staff access">
+    In **Roles**, give clinic staff the medical records permissions so they can create and read entries.
+  </Step>
+</Steps>
+
+## Log a clinic visit
+
+<Steps>
+  <Step title="Open Medical Records">
+    Go to **Medical Records → All records** and select **New record**.
+  </Step>
+  <Step title="Pick the student">
+    Search for the student by name or ID number.
+  </Step>
+  <Step title="Fill in the visit details">
+    Choose a **Type**, set the **Visit date**, and enter the diagnosis, treatment, and any vitals.
+  </Step>
+  <Step title="Set status, priority, and follow-up">
+    Mark the record as open or resolved, set a priority, and add a follow-up date if another visit is needed.
+  </Step>
+  <Step title="Mark confidential if needed">
+    Toggle **Confidential** for sensitive cases such as mental health or emergency records.
+  </Step>
+</Steps>
+
+## Confidentiality
+
+Records flagged **Confidential** are restricted by the medical records policy. Only roles with the confidential-records permission can view them. Use this for any entry that should not appear to general administrative users.
+
+<Warning>
+  Treat medical data as sensitive personal information. Review your roles and permissions before enabling the module in production and make sure only clinic staff can read non-confidential records.
+</Warning>
+
+## Dashboard widget
+
+The module adds a **Medical stats** widget to the admin dashboard that summarizes recent visits, open follow-ups, and priority breakdowns. Use it for a quick read on clinic activity.
+
+## Related pages
+
+<CardGroup cols={2}>
+  <Card title="Feature modules" icon="puzzle-piece" href="/configuration/modules">
+    Enable or disable the Student Medical Records module for your installation.
+  </Card>
+  <Card title="Notification Center" icon="bell" href="/configuration/notification-center">
+    Send follow-up reminders to students through the notification system.
+  </Card>
+</CardGroup>
