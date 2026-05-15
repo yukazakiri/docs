@@ -3,6 +3,22 @@ title: "Changelog"
 description: "What's new in KoAkademy. Follow product updates, improvements, and fixes shipping each week."
 ---
 
+<Update label="May 10, 2026" tags={["self-hosting", "deployment"]}>
+  ## Updates
+
+  **Database options for self-hosting**
+
+  Self-hosted installs now have first-class guidance for running KoAkademy on SQLite, PostgreSQL, or MySQL/MariaDB, including ready-to-paste Docker Compose service definitions and environment variables for each engine. [Learn more](/self-hosting/deployment#database-options).
+
+  **Redis is now optional**
+
+  KoAkademy no longer requires Redis when you stick to the database-backed queue, cache, and session drivers. The container skips its Redis health check when no Redis-backed service is configured, so you can drop the Redis service from your Compose file for small installs. [Learn more](/self-hosting/deployment#horizon-and-queue-drivers).
+
+  **`HORIZON_ENABLED` toggle**
+
+  A new `HORIZON_ENABLED` environment variable lets you force Horizon on or off independent of your queue driver. Horizon still starts automatically with `QUEUE_CONNECTION=redis`, and the `horizon:snapshot` scheduled task is skipped when Horizon is disabled. [Learn more](/self-hosting/deployment#horizon-and-queue-drivers).
+</Update>
+
 <Update label="May 8, 2026" tags={["enrollment", "announcements"]}>
   ## New features
 
