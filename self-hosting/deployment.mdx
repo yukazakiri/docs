@@ -109,9 +109,19 @@ The minimal Docker setup needs only a handful of values in your `.env`:
   The image runs migrations on every boot by default (`RUN_MIGRATIONS=true`) and listens on port `8000`. Set `RUN_MIGRATIONS=false` if you need to gate migrations behind your own deploy step.
 </Tip>
 
+<Note>
+  Set `APP_ENV=demo` to have the container run `php artisan migrate --seed` at boot instead of `migrate` alone. Use this for demo environments where you want seeders to populate sample data after each migration. Leave `APP_ENV=production` (the default) for real deployments — production boots run migrations only.
+</Note>
+
 ## Database options
 
-KoAkademy supports SQLite, PostgreSQL, and MySQL or MariaDB. SQLite is the default and works for evaluation, single-host installs, and small teams. Switch to PostgreSQL for production deployments that need stronger concurrency, replication, or remote backups.
+KoAkademy supports SQLite, PostgreSQL, MySQL or MariaDB, and Microsoft SQL Server. SQLite is the default and works for evaluation, single-host installs, and small teams. Switch to PostgreSQL for production deployments that need stronger concurrency, replication, or remote backups.
+
+At boot, the container detects `DB_CONNECTION` and:
+
+- Picks sane host and port defaults for the matching driver (for example, `pgsql:5432`, `mysql:3306`, `sqlsrv:1433`) when `DB_HOST` and `DB_PORT` are not set.
+- Runs a driver-aware connection probe before starting the app for `pgsql`, `mysql`, `mariadb`, and `sqlsrv`.
+- Skips the connection probe entirely when `DB_CONNECTION=sqlite`, since SQLite is file-based and does not reach over the network.
 
 <Tabs>
   <Tab title="SQLite (default)">
@@ -160,6 +170,18 @@ KoAkademy supports SQLite, PostgreSQL, and MySQL or MariaDB. SQLite is the defau
 
     ```sh
     docker compose exec app php artisan migrate --force
+    ```
+  </Tab>
+  <Tab title="SQL Server">
+    Use Microsoft SQL Server when your organization standardizes on it. The boot-time probe waits for the server to accept connections before the app starts.
+
+    ```env
+    DB_CONNECTION=sqlsrv
+    DB_HOST=sqlsrv
+    DB_PORT=1433
+    DB_DATABASE=koakademy
+    DB_USERNAME=koakademy
+    DB_PASSWORD=replace-with-strong-password
     ```
   </Tab>
   <Tab title="MySQL or MariaDB">
