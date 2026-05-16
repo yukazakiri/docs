@@ -65,7 +65,8 @@
             "pages": [
               "self-hosting/quick-start",
               "self-hosting/deployment",
-              "self-hosting/development"
+              "self-hosting/development",
+              "self-hosting/demo-mode"
             ]
           },
           {

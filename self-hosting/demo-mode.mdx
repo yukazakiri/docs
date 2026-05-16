@@ -1,0 +1,138 @@
+---
+title: "Run KoAkademy in demo mode"
+description: "Showcase KoAkademy with one-click student, faculty, and admin sample logins, a daily database reset, and a persistent demo banner."
+---
+
+Demo mode turns a KoAkademy install into a public sandbox. Visitors land on the login screen, pick a role, and enter the app as a sample user — no credentials required. The database resets every day, so anyone can poke at every feature without breaking the next person's session.
+
+Use this when you want to:
+
+- Publish a live, interactive demo of your KoAkademy deployment.
+- Let evaluators try the student, faculty, and admin experiences without provisioning real accounts.
+- Run a workshop or sales environment that returns to a known state each morning.
+
+<Warning>
+  Demo mode is **not** for production. It allows anyone to sign in as an administrator and wipes the database daily. Only enable it on an isolated environment that contains no real user data.
+</Warning>
+
+## How it works
+
+When the application environment is set to `demo`, KoAkademy enables three behaviors:
+
+- A **"Try the demo instantly"** panel is rendered on the login screen with one-click buttons for each role configured in `config/demo.php`.
+- A **demo mode banner** is pinned to the top of every page that reminds visitors the database resets daily.
+- A scheduled job runs `php artisan migrate:fresh --seed --force` **once per day** to restore the database and re-seed sample data.
+
+The service worker and PWA install prompt are also disabled while in demo mode so visitors are never asked to install the app to their device, and any previously cached assets are cleared on first load.
+
+## Enable demo mode
+
+Set the application environment to `demo` and make sure the scheduler is running.
+
+<Steps>
+  <Step title="Switch the environment">
+    Update your `.env` to set `APP_ENV` to `demo`. Keep `APP_DEBUG=false` so internal stack traces are not exposed.
+
+    ```env
+    APP_ENV=demo
+    APP_DEBUG=false
+    ```
+  </Step>
+  <Step title="Seed sample accounts">
+    Demo logins authenticate against existing users that match the emails in `config/demo.php`. Run the seeders so those users exist:
+
+    ```sh
+    docker compose exec app php artisan migrate:fresh --seed --force
+    ```
+
+    The bundled seeders create a sample student, faculty member, and administrator that match the default demo emails.
+  </Step>
+  <Step title="Run the scheduler">
+    The daily reset runs from Laravel's scheduler. In the official Docker image the scheduler is already supervised — no extra action required. If you run KoAkademy outside the image, schedule the Laravel scheduler every minute:
+
+    ```cron
+    * * * * * cd /app && php artisan schedule:run >> /dev/null 2>&1
+    ```
+  </Step>
+  <Step title="Open the login page">
+    Visit your KoAkademy URL. The demo banner appears at the top of every page and the login form now shows a **Continue as Student**, **Continue as Faculty**, and **Continue as Admin** button.
+  </Step>
+</Steps>
+
+## Configure demo accounts
+
+The roles, labels, descriptions, and target email addresses are defined in `config/demo.php`. Each entry maps a button on the login screen to an existing user in the database.
+
+```php config/demo.php
+return [
+    'accounts' => [
+        'student' => [
+            'role' => 'student',
+            'label' => 'Student',
+            'description' => 'Explore schedules, classes, tuition, and student services.',
+            'email' => 'john.student@student.koakademy.edu',
+        ],
+        'faculty' => [
+            'role' => 'faculty',
+            'label' => 'Faculty',
+            'description' => 'Review classes, students, assignments, and faculty tools.',
+            'email' => 'j.adams@koakademy.edu',
+        ],
+        'admin' => [
+            'role' => 'admin',
+            'label' => 'Admin',
+            'description' => 'Preview administrative dashboards and management workflows.',
+            'email' => 'admin@koakademy.edu',
+        ],
+    ],
+];
+```
+
+| Field         | What it controls                                                                 |
+| ------------- | -------------------------------------------------------------------------------- |
+| `role`        | URL slug for the demo login route (`/demo-login/{role}`) and icon selection.     |
+| `label`       | Button text shown on the login form, e.g. "Continue as Student".                 |
+| `description` | Secondary line under the button that explains what the role can preview.        |
+| `email`       | Email of the existing user the visitor is signed in as. Must match a seeded user. |
+
+<Tip>
+  To add a new role (for example, a registrar persona), add an entry to `config/demo.php`, seed a matching user, and the login form picks it up automatically the next time the page renders.
+</Tip>
+
+## The daily reset
+
+While `APP_ENV=demo`, the scheduler runs the following command once per day:
+
+```sh
+php artisan migrate:fresh --seed --force
+```
+
+This **drops every table** in the configured database, re-runs all migrations, and re-seeds the demo data. The command is guarded with `withoutOverlapping()` so it never runs twice concurrently, and it is gated to the `demo` environment so it cannot run in staging or production by accident.
+
+If you need to reset on demand, run the same command manually:
+
+```sh
+docker compose exec app php artisan migrate:fresh --seed --force
+```
+
+## The demo login endpoint
+
+Each demo button posts to `/demo-login/{role}`, which:
+
+1. Returns **404** unless `APP_ENV=demo`.
+2. Looks up the role in `config/demo.php` and resolves the configured email.
+3. Signs the matching user in and redirects to the role's default dashboard.
+
+Because the route is gated on the environment, it disappears automatically when you move the same codebase to staging or production.
+
+## Disable demo mode
+
+Set `APP_ENV` back to `production` (or any value other than `demo`) and restart the app. The demo banner, demo login buttons, and daily reset all stop immediately. The PWA install prompt and service worker are restored on the next page load.
+
+```env
+APP_ENV=production
+```
+
+<Note>
+  Disabling demo mode does not remove the seeded sample users. Delete them through the admin panel if you do not want them in your production database.
+</Note>
